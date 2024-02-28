@@ -10,12 +10,12 @@ Les tableaux sont une structure de données en Go permettant d'allouer des blocs
 de mémoire contigus à tailles fixes. En Go, Les tableaux possèdent caractéristiques
 spéciales, relatives à la façon dont ils sont déclarés et sont considérés comme des types.
 
-** Examen de Code
+** Analyse de Code
 
 - *Example* *1:* Déclarer, Initialiser et Itérer
 - *Example* *2:* Tableaux de différents types
 - *Example* *3:* Allocations de mémoire contiguë
-- *Example* *4:* Range mechanics
+- *Example* *4:* Mécaniques de Parcours
 
 .play arrays/example1.go
 .play arrays/example2.go
@@ -51,11 +51,10 @@ partageant le même tableau sous-jacent.
 Le coût de copie d'une chaîne de caractères est le même quelle que soit la taille de la chaîne, 
 car il s'agit d'une copie de deux mots.
 
-
 ** Itérer sur des Collections
 
-"Go propose deux sémantiques différentes pour parcourir une collection. On peut itérer en utilisant 
-la sémantique par valeur ou la sémantique par pointeur.
+"Go propose deux sémantiques différentes pour parcourir une collection. On peut itérer en 
+utilisant la sémantique par valeur ou la sémantique par pointeur.
 
     // Itération à sémantique par valeur
     for i, fruit := range strings {
@@ -71,11 +70,12 @@ la sémantique par valeur ou la sémantique par pointeur.
 Lorsque vous utilisez l'itération sémantique par valeur, deux choses se produisent. 
 Premièrement, la collection sur laquelle vous itérez est copiée et vous itérez sur la copie. 
 Dans le cas d'un tableau, la copie peut être coûteuse, car l'ensemble du tableau est copié. 
-Dans le cas d'une slice, il n'y a pas vraiment de coût, car seule la valeur interne de la slice est copiée, 
-et non le tableau sous-jacent. Deuxièmement, vous obtenez une copie de chaque élément sur lequel vous itérez.
+Dans le cas d'une slice, il n'y a pas vraiment de coût, car seule la valeur interne de la slice 
+est copiée, et non le tableau sous-jacent. Deuxièmement, vous obtenez une copie de chaque 
+élément sur lequel vous itérez.
 
-Lorsque vous utilisez l'itération sémantique par pointeur, vous parcourez directement la collection d'origine 
-et accédez directement à chaque élément associé à la collection.
+Lorsque vous utilisez l'itération sémantique par pointeur, vous parcourez directement la 
+collection d'origine et accédez directement à chaque élément associé à la collection.
 
 ** Itération Sémantique par Valeur
 
@@ -94,22 +94,22 @@ Sortie :
     3 Grape
     4 Plum
 
-La variable `strings` est un tableau de 5 chaînes de caractères. La boucle parcourt chaque chaîne 
-de la collection et affiche la position de l'index et la valeur de la chaîne. Puisque l'itération 
-se fait par sémantique par valeur, la boucle `for range` parcourt sa propre copie du tableau 
-et à chaque itération, la variable fruit est une copie de chaque chaîne de caractères 
-(la structure de données à deux mots).
+La variable `strings` est un tableau de cinq chaînes de caractères. La boucle parcourt chaque 
+chaîne de la collection et affiche la position de l'index et la valeur de la chaîne. 
+Puisque l'itération se fait par sémantique par valeur, la boucle `for range` parcourt 
+sa propre copie du tableau et à chaque itération, la variable `fruit` est une copie de chaque 
+chaîne de caractères (la structure de données à deux mots).
 
 Remarquez comment la variable `fruit` est passée à la fonction `print` en utilisant la sémantique par valeur. 
 La fonction `print` obtient également sa propre copie de la valeur de la chaîne. 
-Au moment où la chaîne est passée à la fonction `print`, il existe 4 copies de la valeur de la chaîne 
+Au moment où la chaîne est passée à la fonction `print`, il existe quatre copies de la valeur de la chaîne 
 (le tableau original, une copie superficielle, la variable `fruit` et la copie de la fonction `print`). 
-Ces 4 copies partagent toutes le même tableau d'octets sous-jacent.
+Ces quatre copies partagent toutes le même tableau d'octets sous-jacent.
 
 .image /tour/eng/static/img/a3.png
 
 Faire des copies de la valeur d'une chaîne est important, car cela empêche la valeur de la chaîne 
-de s'échapper vers le heap. Cela évite des allocations non-productives sur le heap.
+de s'échapper vers le heap. Cela évite des allocations non-productives dans le heap.
 
 ** Itération Sémantique par Pointeur
 
@@ -128,7 +128,7 @@ Sortie :
     3 Grape
     4 Plum
 
-Encore une fois, la variable `strings` est un tableau de 5 chaînes de caractères. La boucle parcourt 
+Encore une fois, la variable `strings` est un tableau de cinq chaînes de caractères. La boucle parcourt 
 chaque chaîne de la collection et affiche la position de l'index et la valeur de la chaîne. 
 Puisque l'itération se fait par sémantique par pointeur, la boucle `for range` parcourt directement 
 le tableau `strings` et à chaque itération, la valeur de la chaîne pour chaque position d'index est directement 
@@ -136,8 +136,8 @@ accessible pour l'appel à la fonction `print`.
 
 ** Tableaux de Différents Types 
 
-Il est intéressant de voir quelle erreur le compilateur produit lorsqu'on tente d'assigner 
-des tableaux du même type, mais de longueur différente.
+Il est intéressant de voir quelle erreur le compilateur produit lorsqu'on tente d'assigner des tableaux du même type, 
+mais de longueurs différentes.
 
     var five [5]int
     four := [4]int{10, 20, 30, 40}
@@ -148,13 +148,13 @@ Erreur de Compilateur :
 
     cannot use four (type [4]int) as type [5]int in assignment
 
-Ici, vous déclarez un tableau de 4 entiers et un autre de 5 entiers, tous deux initialisés à leur état de valeur zéro. 
+Ici, vous déclarez un tableau de quatre entiers et un autre de cinq, tous deux initialisés à leur état de valeur zéro. 
 Ensuite, vous essayez de les assigner l'un à l'autre et le compilateur vous dit : 
 "impossible d'utiliser `four` (type [4]int) comme type [5]int dans l'assignation".
 
-Il est important de bien comprendre ce que le compilateur nous dit. Il nous indique qu'un tableau de 4 entiers 
-et un tableau de 5 entiers représentent des données de types différents. La taille d'un tableau 
-fait partie de son information de type. En Go, la taille d'un tableau doit être connue au moment de la compilation.
+Il est important de bien comprendre ce que le compilateur nous dit. Il nous indique qu'un tableau de quatre entiers 
+et un tableau de cinq entiers représentent des données de types différents. La taille d'un tableau fait partie 
+de son information de type. En Go, la taille d'un tableau doit être connue au moment de la compilation.
 
 ** Construction de Mémoire Contiguë.
 
@@ -175,14 +175,13 @@ Sortie :
     Value[Doug]      Address[0xc000010250]    IndexAddr[0xc0000521b0]
     Value[Bill]      Address[0xc000010250]    IndexAddr[0xc0000521c0]
 
-Ici, vous déclarez un tableau de 5 chaînes de caractères initialisées avec des valeurs. 
+Ici, vous déclarez un tableau de cinq chaînes de caractères initialisé avec des valeurs. 
 Ensuite, vous utilisez l'itération sémantique par valeur pour afficher des informations sur chaque chaîne. 
-La sortie montre la valeur de chaque chaîne individuelle, l'adresse de la variable `v` 
-et l'adresse de chaque élément du tableau.
+La sortie montre la valeur de chaque chaîne individuelle, l'adresse de la variable `v` et l'adresse de 
+chaque élément du tableau.
 
-Vous pouvez voir comment le tableau est un bloc de mémoire contigu et comment une chaîne est 
-une structure de données à deux mots ou 16 octets sur une architecture 64 bits. L'adresse de chaque élément 
-est espacée d'un pas de 16 octets.
+Vous pouvez voir comment le tableau est un bloc de mémoire contigu et comment une chaîne est une structure de données 
+à deux mots ou 16 octets sur une architecture 64 bits. L'adresse de chaque élément est espacée d'un pas de 16 octets.
 
 Le fait que la variable `v` ait la même adresse à chaque itération renforce la compréhension que `v` 
 est une variable locale de type chaîne de caractères qui contient une copie de chaque valeur de 
@@ -209,7 +208,7 @@ la quantité totale de mémoire que vous possédez est la quantité totale de ca
 La mémoire principale est si lente d'accès que, d'un point de vue pratique, elle pourrait même ne pas exister".
 
 Aujourd'hui, les performances dépendent de l'efficacité du flux de données à travers le matériel. 
-Si chaque élément de données dont le matériel a besoin (à un moment donné) ne se trouve que dans la mémoire principale,
+Si chaque élément de données dont le matériel a besoin (à un instant t) ne se trouve que dans la mémoire principale,
 les programmes s'exécuteront plus lentement par rapport aux données déjà présentes dans les caches L1 ou L2.
 
     3GHz(3 clock cycles/ns) * 4 instructions per cycle = 12 instructions per ns!
@@ -241,7 +240,7 @@ de l'explorer en itérant de manière linéaire avec un pas prévisible.
 
 Le tableau est la structure de données la plus importante pour le matériel, car il permet des modèles 
 d'accès prévisibles. Cependant, la slice est la structure de données la plus importante en Go. 
-Les slices en Go utilisent un tableau sous-jacent.
+Les slices en Go utilisent un/des tableaux sous-jacents.
 
 Une fois que vous construisez un tableau, chaque élément est à la même distance de l'élément suivant ou précédent. 
 Lorsque vous parcourez un tableau, vous commencez à parcourir des lignes de cache connectées les unes aux autres 
@@ -283,7 +282,7 @@ préchargées et copiées dans le cache L1 ou L2 avant que les données ne soien
 
 La traversée par colonne est la pire option, avec une différence significative, car ce modèle d'accès 
 franchit les limites de pagination de l'OS à chaque accès mémoire. Cela rend la prévision du 
-préchargement des lignes de cache impossible et transforme l'accès en mémoire essentiellement aléatoire.
+préchargement des lignes de cache impossible et transforme l'accès en mémoire, essentiellement aléatoire.
 
     func LinkedListTraverse() int {
         var ctr int
@@ -298,14 +297,14 @@ préchargement des lignes de cache impossible et transforme l'accès en mémoire
     }
 
 La traversée de la liste chaînée est deux fois plus lente que la traversée par ligne principalement 
-en raison des ratés de lignes de cache, mais moins de ratés de TLB (Translation Lookaside Buffer). 
+en raison des ratés de lignes de cache, mais d'un nombre plus faible de ratés de TLB (Translation Lookaside Buffer). 
 Une grande partie des nœuds connectés dans la liste se trouvent dans les mêmes pages de l'OS.
 
     BenchmarkLinkListTraverse-16    128      28738407 ns/op
     BenchmarkColumnTraverse-16       30     126878630 ns/op
     BenchmarkRowTraverse-16         310      11060883 ns/op
 
-** Translation Lookaside Buffer (TLB)
+** Buffer de Traduction d'Adresses (TLB)
 
 Le système d'exploitation attribue à chaque programme en cours d'exécution une carte mémoire complète 
 de la mémoire virtuelle. Ce programme pense alors qu'il dispose de toute la mémoire physique de la machine. 
@@ -315,7 +314,7 @@ Le système d'exploitation gère ce partage en divisant la mémoire physique en 
 mais les tailles courantes et raisonnables sont 4 ko, 8 ko et 16 ko.
 
 Le TLB (Translation Lookaside Buffer) est un petit cache intégré au processeur qui aide à réduire la latence 
-de traduction d'une adresse virtuelle en une adresse physique à l'intérieur d'un cadre d'une page de L'OS.
+de traduction d'une adresse virtuelle en une adresse physique au sein d'un espace d'une page de L'OS.
 Un raté de cache du TLB peut entraîner des latences importantes, car le matériel doit alors attendre 
 que l'OS parcoure sa table de pagination pour trouver la page correspondant à l'adresse virtuelle en question.
 Si le programme s'exécute sur une machine virtuelle (comme dans le cloud), la table de pagination de la 
@@ -349,7 +348,7 @@ l'efficacité avec laquelle vous pouvez introduire des données dans le processe
 
 ** Diagrammes Supplémentaires
 
-*Industry* *Defined* *Latencies*
+*Latences* *Définies* *par *L'Industrie*
 
     L1 cache reference ......................... 0.5 ns ...................  6 ins
     Branch mispredict ............................ 5 ns ................... 60 ins
@@ -407,7 +406,7 @@ l'efficacité avec laquelle vous pouvez introduire des données dans le processe
 - Si vous ne comprenez pas la donnée, vous ne comprenez pas le problème.
 - Si vous ne comprenez pas le coût de la résolution du problème, vous ne pouvez pas raisonner sur le problème.
 - Si vous ne comprenez pas le matériel, vous ne pouvez pas raisonner sur le coût de la résolution du problème.
-- Les tableaux sont des structures de données de longueur fixe qui ne peuvent pas être modifiées.
+- Les tableaux sont des structures de données de longueurs fixes qui ne peuvent pas être modifiées.
 - Les tableaux de tailles différentes sont considérés comme étant de types différents.
 - La mémoire est allouée sous la forme d'un bloc contigu.
 - Go vous permet de contrôler la localité spatiale.
@@ -418,8 +417,8 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 1
 
-Déclarez un tableau de 5 chaînes de caractères en initialisant chaque élément à sa valeur zéro. 
-Déclarez un deuxième tableau de 5 chaînes de caractères et initialisez-le avec des valeurs littérales. 
+Déclarez un tableau de cinq chaînes de caractères en initialisant chaque élément à sa valeur zéro. 
+Déclarez un deuxième tableau de cinq chaînes de caractères et initialisez-le avec des valeurs littérales. 
 Assignez le deuxième tableau au premier et affichez le contenu du premier tableau. 
 Affichez la valeur de chaque chaîne et son adresse mémoire.
 

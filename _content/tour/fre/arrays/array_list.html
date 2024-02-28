@@ -2,19 +2,15 @@
 <ul>
     <li>Les caches CPU fonctionnent en mettant en cache la mémoire principale dans des lignes de cache.</li>
     <li>Les lignes de cache actuelles ont, selon le matériel, une grandeur de 32 ou 64 octets.</li>
-    <li>Les cores n'accèdent pas directement à la mémoire principale. Ils ont généralement accès uniquement,
-        à leurs caches locaux.</li>
+    <li>Les cores n'accèdent pas directement à la mémoire principale. Ils ont généralement accès uniquement à leurs caches locaux.</li>
     <li>Les caches stockent à la fois des données et des instructions.</li>
-    <li>Lorsque de nouvelles lignes de caches doivent être stockées dans le cache,
-        les lignes de caches existantes sont déplacées vers le bas selon l'ordre L1-&gt;L2-&gt;L3.</li>
+    <li>Lorsque de nouvelles lignes de caches doivent être stockées dans le cache, les lignes de caches existantes sont déplacées vers le bas selon l'ordre L1-&gt;L2-&gt;L3.</li>
     <li>Le matériel privilégie un parcours des données linéaire, le long des lignes de cache.</li>
-    <li><p>La mémoire principale est construite avec une mémoire relativement rapide et bon marché.
-        Les caches sont construits avec une mémoire très rapide et onéreuse.</p>
+    <li><p>La mémoire principale est construite avec une mémoire relativement rapide et bon marché. Les caches sont construits avec une mémoire très rapide et onéreuse.</p>
     </li>
     <li><p>L'accès à la mémoire principale bien qu'incroyablement lent, reste nécessaire.</p>
         <ul>
-            <li>L'accès à un seul octet de la mémoire principale entraîne la lecture et la mise en cache
-                de toute une ligne de cache.</li>
+            <li>L'accès à un seul octet de la mémoire principale entraîne la lecture et la mise en cache de toute une ligne de cache.</li>
             <li>L'écriture d'un seul octet dans une ligne de cache nécessite l'écriture de toute la ligne de cache.</li>
         </ul>
     </li>
@@ -32,7 +28,7 @@
             <li>Le matériel peut faire de meilleures prédictions sur la mémoire nécessaire.</li>
         </ul>
     </li>
-    <li><p>Les ratés de cache peuvent également entraîner des ratés de cache TLB.</p>
+    <li><p>Les ratés de cache peuvent également entraîner des ratés de cache de TLB.</p>
         <ul>
             <li>Cache des traductions d'adresses virtuelles en adresses physiques.</li>
             <li>Attendre que le système d'exploitation nous indique où se trouve la mémoire.</li>
