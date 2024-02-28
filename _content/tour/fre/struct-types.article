@@ -13,10 +13,10 @@ Les performances potentielles d'une architecture d'ordinateur sont principalemen
 
 ** Examen du Code
 
-- *Example* *1:* Déclarer, créer et initialiser des types struct.
-- *Example* *2:* Types struct Anonyme.
-- *Example* *3:* Types Nommés vs types Anonymes. 
-- *Example* *4:* Alignement des types struct.
+- *Exemple* *1:* Déclarer, créer et initialiser des types struct.
+- *Exemple* *2:* Types struct Anonyme.
+- *Exemple* *3:* Types Nommés vs types Anonymes. 
+- *Exemple* *4:* Alignement des types struct.
 
 .play struct-types/example1.go
 .play struct-types/example2.go
