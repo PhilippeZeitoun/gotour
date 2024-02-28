@@ -12,10 +12,10 @@ spéciales, relatives à la façon dont ils sont déclarés et sont considérés
 
 ** Analyse de Code
 
-- *Example* *1:* Déclarer, Initialiser et Itérer
-- *Example* *2:* Tableaux de différents types
-- *Example* *3:* Allocations de mémoire contiguë
-- *Example* *4:* Mécaniques de Parcours
+- *Exemple* *1:* Déclarer, Initialiser et Itérer
+- *Exemple* *2:* Tableaux de différents types
+- *Exemple* *3:* Allocations de mémoire contiguë
+- *Exemple* *4:* Mécaniques de Parcours
 
 .play arrays/example1.go
 .play arrays/example2.go
