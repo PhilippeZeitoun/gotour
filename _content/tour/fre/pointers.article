@@ -12,11 +12,11 @@ Il existe également une frontière entre les goroutines, que nous vous présent
 
 ** Examen du Code
 
-- *Example* *1:* Passer par Valeur
-- *Example* *2:* Partager des Données I
-- *Example* *3:* Partager des Données II
-- *Example* *4:* Escape Analysis
-- *Example* *5:* Stack Grow
+- *Exemple* *1:* Passage par Valeur
+- *Exemple* *2:* Partager des Données I
+- *Exemple* *3:* Partager des Données II
+- *Exemple* *4:* Analyse d'Échappement
+- *Exemple* *5:* Accroissement de la Stack
 
 .play pointers/example1.go
 .play pointers/example2.go
@@ -30,25 +30,25 @@ que les threads du système d'exploitation. Leur tâche consiste à gérer l'ex�
 d'un ensemble distinct d'instructions. 
 Chaque programme Go possède au moins une Goroutine, appelez la Goroutine principale.
 
-Chaque goroutine se voit attribuer son propre bloc de mémoire, appelé pile (stack). 
-Chaque pile commence par une allocation de 2048 octets (2k). C'est très petit, 
-mais la taille des piles peut augmenter dans le temps.
+Chaque goroutine se voit attribuer son propre bloc de mémoire, appelé stack. 
+Chaque stack commence par une allocation de 2048 octets (2k). C'est très petit, 
+mais la taille des stacks peut augmenter dans le temps.
 
 .image /tour/eng/static/img/p1.png
 
-Chaque fois qu'une fonction est appelée, un bloc de la pile est utilisé pour aider la goroutine 
+Chaque fois qu'une fonction est appelée, un bloc de la stack est utilisé pour aider la goroutine 
 à exécuter les instructions associées à cette fonction. Chaque bloc de mémoire individuel 
 est appelé trame (frame).
 
 La taille d'une trame pour une fonction donnée est calculée au moment de la compilation. 
-Aucune valeur ne peut être construite sur la pile si le compilateur ne connaît pas la taille de cette valeur
+Aucune valeur ne peut être construite sur la stack si le compilateur ne connaît pas la taille de cette valeur
 au moment de la compilation. Si le compilateur ne connaît pas la taille d'une valeur au moment de la compilation,
-la valeur doit être construite dans le tas (heap).
+la valeur doit être construite dans le heap.
 
 
-Les piles sont auto-nettoyantes et la valeur zéro contribue à l'initialisation de la pile. 
+Les stacks sont auto-nettoyantes et la valeur zéro contribue à l'initialisation de la stack. 
 Chaque fois que vous faites un appel de fonction et qu'une trame de mémoire est bloqué, 
-la mémoire de cette trame est initialisée, ce qui permet à la pile de s'auto-nettoyer. 
+la mémoire de cette trame est initialisée, ce qui permet à la stack de s'auto-nettoyer. 
 Lors du retour d'une fonction, la mémoire de la trame est laissée en l'état, 
 car on ne sait pas si cette mémoire sera à nouveau nécessaire. 
 Il serait inefficace d'initialiser la mémoire lors des retours.
@@ -131,17 +131,17 @@ Sortie :
 ** Analyse d'Échappement
 
 L'algorithme utilisé par le compilateur pour déterminer si une valeur doit être construite 
-sur la pile ou sur le tas est appelé "analyse d'échappement". Le nom de l'algorithme donne l'impression
-que les valeurs sont d'abord construites sur la pile, puisqu'elles s'échappent (ou se déplacent) 
-vers le tas lorsque c'est nécessaire. Ce n'est PAS le cas. La construction d'une valeur n'a lieu qu'une seule fois, 
-et l'algorithme d'analyse d'échappement décide de son emplacement (pile ou tas). 
-Seule la construction sur le tas est appelée allocation en Go.
+dans la stack ou dans le heap est appelé "analyse d'échappement". Le nom de l'algorithme donne l'impression
+que les valeurs sont d'abord construites sur la stack, puisqu'elles s'échappent (ou se déplacent) 
+vers le heap lorsque c'est nécessaire. Ce n'est PAS le cas. La construction d'une valeur n'a lieu qu'une seule fois, 
+et l'algorithme d'analyse d'échappement décide de son emplacement (stack ou heap). 
+Seule la construction dans le heap est appelée allocation en Go.
 
 Comprendre l'analyse d'échappement, c'est comprendre la propriété de la valeur. L'idée est que 
 lorsqu'une valeur est construite dans le cadre d'une fonction, alors cette fonction est propriétaire de la valeur.
 À partir de là, il faut se poser la question suivante : la valeur construite doit-elle encore exister 
-lorsque la fonction propriétaire s'achève ? Si la réponse est non, alors la valeur peut être construite sur la pile.
-Si la réponse est oui, la valeur doit être construite sur le tas.
+lorsque la fonction propriétaire s'achève ? Si la réponse est non, alors la valeur peut être construite sur la stack.
+Si la réponse est oui, la valeur doit être construite dans le heap.
 
 
 Notes : la règle de propriété est une bonne règle de base pour identifier le code qui provoque des allocations.
@@ -164,14 +164,13 @@ pour économiser des allocations.
         return u
     }
 
-La fonction stayOnStack utilise la sémantique des valeurs pour renvoyer 
-une valeur user à l'appelant. En d'autres termes, l'appelant reçoit sa propre copie 
-de la valeur user construite.
+La fonction `stayOnStack` utilise la sémantique par valeur pour renvoyer une valeur `user` à l'appelant. 
+En d'autres termes, l'appelant reçoit sa propre copie de la valeur `user` qui a été construite.
 
-Lorsque la fonction stayOnStack est appelée et s'achève, la valeur de user qu'elle a construite
+Lorsque la fonction `stayOnStack` est appelée et s'achève, la valeur de `user` qu'elle a construite
 n'a plus besoin d'exister, dans la mesure où l'appelant en possède sa propre copie.
-Ainsi, la construction de la valeur de user à l'intérieur de stayOnStack peut se produire
-dans la pile.
+Ainsi, la construction de la valeur de `user` à l'intérieur de `stayOnStack` peut se produire
+dans la stack.
 Pas d'allocation.
 
     type user struct {
@@ -188,93 +187,94 @@ Pas d'allocation.
         return &u
     }
 
-La fonction escapeToHeap utilise la sémantique des pointeurs pour renvoyer une valeur 
-user à l'appelant. En d'autres termes, l'appelant obtient un accès partagé (une adresse)
+La fonction `escapeToHeap` utilise la sémantique par pointeur pour renvoyer une valeur 
+`user` à l'appelant. En d'autres termes, l'appelant obtient un accès partagé (une adresse)
 à la valeur construite.
 
-Lorsque la fonction escapeToHeap est appelée et s'achève, la valeur user construite doit toujours
+Lorsque la fonction `escapeToHeap` est appelée et s'achève, la valeur `user` construite doit toujours
 exister, car l'appelant a obtenu un accès partagé à son adresse. C'est pourquoi, la construction
-de la valeur user au sein de la fonction escapeToHeap ne peut se faire dans la pile, 
-mais doit s'effectuer dans le tas.
+de la valeur `user` au sein de la fonction `escapeToHeap` ne peut se faire dans la stack, 
+mais doit s'effectuer dans le heap.
 Ici une allocation a bien lieu.
 
-Pensez à ce qui pourrait se passer si la valeur user dans le dernier exemple avait été construite
-dans la pile et retournée en utilisant la sémantique de pointeur.
+Pensez à ce qui pourrait se passer si la valeur `user` dans le dernier exemple avait été construite
+dans la stack et retournée en utilisant la sémantique par pointeur.
 
 .image /tour/eng/static/img/p2.png
 
-L'appelant obtiendrait une copie de l'adresse de la pile à partir de la trame inférieure, ce qui entrainerait
-une perte d'intégrité. Une fois le contrôle revenu à la fonction appelante, la mémoire de la pile où réside
-la valeur user redevient utilisable. Dès que la fonction appelante effectue un autre appel, une nouvelle trame
-est découpée et la mémoire sera écrasée, détruisant la valeur partagée.
+L'appelant obtiendrait une copie de l'adresse de la stack à partir de la trame inférieure, ce qui entrainerait
+une perte d'intégrité. Une fois le contrôle revenu à la fonction appelante, la mémoire de la stack où réside
+la valeur `user` redevient utilisable. Dès que la fonction appelante effectue un autre appel, une nouvelle trame
+est découpée et la mémoire est écrasée, détruisant la valeur partagée.
 
-C'est pour cela que l'on considère la pile comme auto-nettoyante. L'initialisation à la valeur zéro 
-aide chaque trame de pile à être nettoyée sans avoir recours au ramasse-miettes (Garbage Collector). La pile est 
+C'est pour cela que l'on considère la stack comme auto-nettoyante. L'initialisation à la valeur zéro 
+aide chaque trame de stack à être nettoyée sans avoir recours au ramasse-miettes (Garbage Collector). La stack est 
 auto-nettoyante car une nouvelle trame est créée et initialisée pour l'exécution de chaque appel de fonction.
-Le nettoyage de la pile se produit lors des appels de fonction et non des retours car le compilateur 
-ne sait pas si cette mémoire sur la pile sera à nouveau nécessaire.
+Le nettoyage de la stack se produit lors des appels de fonctions et non des retours, car le compilateur 
+ne sait pas si cette mémoire sur la stack sera à nouveau nécessaire.
 
-L'analyse d'échappement décide si une valeur sera construite sur la pile (par défaut) ou dans le tas 
-(l'échappement). Avec la fonction stayOnStack, je renvoie une copie de la valeur à l'appelant, conserver 
-une copie dans la pile est donc sans danger. Avec la fonction escapeToHeap, Je renvoie une copie de
-l'adresse de la valeur à l'appelant (partageant ainsi la pile), il n'est donc pas sûr de conserver
-la valeur dans la pile.
+L'analyse d'échappement décide si une valeur sera construite sur la stack (par défaut) ou dans le heap 
+(l'échappement). Avec la fonction `stayOnStack`, je renvoie une copie de la valeur à l'appelant, conserver 
+une copie dans la stack est donc sans danger. Avec la fonction `escapeToHeap`, Je renvoie une copie de
+l'adresse de la valeur à l'appelant (partageant ainsi la stack), il n'est ainsi pas sûr de conserver
+la valeur dans la stack.
 
 Il y a tout un tas de petits détails concernant l'analyse d'échappement, aussi, pour en savoir plus,
-reportez-vous à l'article du chapitre 14 intitulé "Mécanismes de l'analyse d'évasion".
+reportez-vous à l'article du chapitre 14 intitulé "Mécanismes de l'analyse d'échappement".
 
 Notes : à partir de la version 1.17, Go a modifié l'ABI (interface binaire d'application) 
 pour mettre en œuvre une nouvelle façon de passer les arguments d'entrée et de sortie des fonctions
-en utilisant des registres au lieu de la mémoire sur la pile. Cette fonctionnalité est disponible pour 
+en utilisant des registres au lieu de la mémoire dans la stack. Cette fonctionnalité est disponible pour 
 Linux, MacOS et Windows sur les architectures x86 64 bits. Cela signifie que certains arguments de fonctions
-ne seront pas copiés sur la pile, mais que d'autres pourront l'être en fonction de la viabilité d'utilisation
+ne seront pas copiés dans la stack, mais que d'autres pourront l'être en fonction de la viabilité d'utilisation
 des registres. 
 Cela ne change rien à la sémantique décrite dans ce chapitre.
 
 ** Notes
 
 - Lorsqu'une valeur peut être référencée après le retour de la fonction qui l'a construite.
-- Lorsque le compilateur détermine qu'une valeur est trop grande pour tenir sur la pile.
+- Lorsque le compilateur détermine qu'une valeur est trop grande pour tenir dans la stack.
 - Lorsque le compilateur ne connaît pas la taille d'une valeur au moment de la compilation.
 - Lorsqu'une valeur est découplée par l'utilisation de valeurs de fonction ou d'interface.
 
 ** Sémantique du Ramasse-Miettes
 
-Une fois qu'une valeur est construite sur le tas, le ramasse-miettes (Garbage Collector - GC) doit être impliqué.
-La partie la plus importante du ramasse-miette (GC) est l'algorithme de rythme (Passing Algorithm).
-Il détermine la fréquence/le rythme auquel le ramasse-miettes doit s'exécuter afin de maintenir 
-le tas le plus petit possible tout en assurant la meilleure capacité de traitement possible pour l'application.
+Une fois qu'une valeur est construite dans le heap, le ramasse-miettes (Garbage Collector - GC) doit être impliqué.
+La partie la plus importante du ramasse-miette (GC) est l'algorithme de passage (Passing Algorithm).
+Il détermine la fréquence/le rythme auquel le ramasse-miettes doit s'exécuter afin de maintenir le heap le plus petit 
+possible tout en assurant la meilleure capacité de traitement possible pour l'application.
 
 - [[https://www.ardanlabs.com/blog/2018/12/garbage-collection-in-go-part1-semantics.html][Garbage Collection Semantics Part I]] - William Kennedy
 
-** Pile (Stack) vs Tas (Heap)
+** Stack vs Heap
 
-"La pile est destinée aux données qui ne doivent persister que pendant la durée de vie de la fonction
-qui les a construites, et est récupérée sans frais lorsque la fonction s'arrête. Le tas est destiné aux 
+"La stack est destinée aux données qui ne doivent persister que pendant la durée de vie de la fonction
+qui les a construites, et est récupérée sans frais lorsque la fonction s'arrête. Le heap est destiné aux 
 données qui doivent persister après la sortie de la fonction qui les a construites, et est récupéré par 
 un ramasse-miettes parfois coûteux." - Ayan George
 
-** Croissance de la Pile
+** Accroissement de la stack
 
 La taille de chaque trame pour chaque fonction est calculée au moment de la compilation. Cela signifie, 
 que si le compilateur ne connaît pas la taille d'une valeur au moment de la compilation, la valeur doit 
-être construite sur le tas. Un exemple de ceci est l'utilisation de la fonction intégrée make pour 
+être construite dans le heap. Un exemple de ceci est l'utilisation de la fonction intégrée `make` pour 
 construire une "slice" dont la taille est basée sur une variable.
 
-    b := make([]byte, size) // Tableau de référence alloué sur le tas.
+    b := make([]byte, size) // Tableau de référence alloué dans le heap.
 
-Go utilise une implémentation de pile contiguë pour déterminer comment les piles augmentent et diminuent.
-Une alternative aurait été que Go utilise une pile segmentée, comme c'est le cas pour certains systèmes d'exploitation.
+Go utilise une implémentation de stack contiguë pour déterminer comment les stacks augmentent et diminuent.
+Une alternative aurait été que Go utilise une stack segmentée, comme c'est le cas pour certains systèmes d'exploitation.
 
-Chaque appel de fonction est accompagné d'un petit préambule qui demande : "Y a-t-il assez de place sur la pile
+Chaque appel de fonction est accompagné d'un petit préambule qui demande : "Y a-t-il assez de place dans la stack
 pour cette nouvelle trame ? Si c'est le cas, il n'y a pas de problème et la trame est prise et initialisée. 
-Dans le cas contraire, une nouvelle pile plus grande doit être construite et la mémoire de la pile existante 
-doit y être copiée. Cela nécessite de modifier les pointeurs qui font référence à la mémoire de la pile. 
+Dans le cas contraire, une nouvelle stack plus grande doit être construite et la mémoire de la stack existante 
+doit y être copiée. Cela nécessite de modifier les pointeurs qui font référence à la mémoire de la stack. 
 Les avantages de la mémoire contiguë et des parcours linéaires avec le matériel moderne compensent le coût de la copie.
 
-En raison de l'utilisation de piles contiguës, aucune Goroutine ne peut avoir un pointeur vers la pile d'une autre Goroutine. 
+En raison de l'utilisation de stacks contiguës, aucune Goroutine ne peut avoir un pointeur vers la stack d'une autre 
+Goroutine. 
 Cela génèrerait une charge de travail trop importante pour que le runtime garde la trace de chaque pointeur 
-sur chaque pile et réajuste ces pointeurs vers leurs nouveaux emplacements.
+sur chaque stack et réajuste ces pointeurs vers leurs nouveaux emplacements.
 
 ** Lectures Supplémentaires
 
@@ -285,7 +285,7 @@ sur chaque pile et réajuste ces pointeurs vers leurs nouveaux emplacements.
 - [[https://www.ardanlabs.com/blog/2014/12/using-pointers-in-go.html][Using Pointers In Go]] - William Kennedy    
 - [[https://www.ardanlabs.com/blog/2013/07/understanding-pointers-and-memory.html][Understanding Pointers and Memory Allocation]] - William Kennedy    
 
-*Piles*
+*Stacks*
 
 - [[https://docs.google.com/document/d/1wAaf1rYoM4S4gtnPh0zOlGzWtrZFQ5suE8qr2sD8uWQ/pub][Contiguous Stack Proposal]]  
 
@@ -311,7 +311,7 @@ sur chaque pile et réajuste ces pointeurs vers leurs nouveaux emplacements.
 - [[https://www.ardanlabs.com/blog/2019/07/garbage-collection-in-go-part3-gcpacing.html][Garbage Collection In Go : Part III - GC Pacing]] - William Kennedy  
 - [[https://blog.twitch.tv/en/2019/04/10/go-memory-ballast-how-i-learnt-to-stop-worrying-and-love-the-heap-26c2462549a2/][Go memory ballast: How I learnt to stop worrying and love the heap]] - Ross Engers  
 
-*Optimisations* *À* *Affectation* *Unique* *Statique*
+*Optimisations* *par* *Affectation* *Unique* *Statique*
 
 - [[https://www.youtube.com/watch?v=D2-gaMvWfQY][GopherCon 2015: Ben Johnson - Static Code Analysis Using SSA]]  
 - [[https://godoc.org/golang.org/x/tools/go/ssa][Package SSA]]    
@@ -329,7 +329,7 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 2
 
-Déclarer un type de struct et créer une valeur de ce type. Déclarez une fonction qui peut modifier la valeur d'un champ de ce type struct. Affichez la valeur avant et après l'appel à votre fonction.
+Déclarez un type de struct et créer une valeur de ce type. Déclarez une fonction qui peut modifier la valeur d'un champ de ce type struct. Affichez la valeur avant et après l'appel à votre fonction.
 
 .play pointers/exercise1.go
 .play pointers/answer1.go
