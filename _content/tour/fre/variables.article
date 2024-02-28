@@ -1,3 +1,6 @@
+Variables
+Les variables sont au cœur du langage et donnent la possibilité de lire depuis la mémoire et d'y écrire.
+ 
 * Variables
 
 - [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
@@ -5,9 +8,9 @@
 
 Les variables sont au cœur du langage et donnent la possibilité de lire depuis la mémoire et d'y écrire. En Go, l'accès à la mémoire est sécurisé par le type. Cela signifie que le compilateur prend les types au sérieux et ne nous permet pas d'utiliser des variables en dehors de la portée de leur déclaration.
 
-** Examen du Code
+** Analyse de Code
 
-- *Example* *1*: Exemple de programme montrant comment déclarer des variables.
+- *Exemple* *1*: Exemple de programme montrant comment déclarer des variables.
 
 .play variables/example1.go
 
@@ -17,7 +20,7 @@ Les types assurent l'intégrité et la lisibilité en posant deux questions :
 Quelle est la quantité de mémoire à allouer (par exemple 1, 2, 4, 8 octets) ?
 Que représente cette mémoire ? (par exemple : int, uint, bool...)
 
-Les types peuvent spécifier une précision telle que int32 ou int64 :
+Les types peuvent spécifier une précision telle que `int32` ou `int64` :
 
 - uint8 représente un entier non signé avec une allocation mémoire de 1 octet.
 - int32 représente un entier signé avec une allocation mémoire de 4 octets. Lorsque vous déclarez un type en utilisant un type dont la précision n'est pas spécifiée (unit, int), la taille de la valeur est basée sur l'architecture utilisée pour construire le programme :
@@ -71,7 +74,7 @@ Sortie :
 
 Les chaînes de caractères utilisent le jeu de caractères UTF8, mais ne sont en réalité qu'une collection d'octets.
 
-En Go, une chaîne est une structure de données interne à deux mots:
+En Go, une chaîne est une structure de données interne à deux mots :
 
 - Le premier mot représente un pointeur vers un tableau d'octets de référence.
 - Le deuxième mot représente la longueur ou le nombre d'octets du tableau de référence.
@@ -98,7 +101,9 @@ Sortie :
 
 ** Conversion vs Casting
 
-Go ne propose de casting, mais une conversion. Au lieu de dire au compilateur de faire correspondre un ensemble d'octets à une représentation différente, les octets doivent être copiés dans un nouvel emplacement mémoire pour leur nouvelle représentation.
+Go ne propose pas de fonctionnalité de casting, mais de conversion. Au lieu de dire au compilateur de mapper un 
+ensemble d'octets vers une représentation différente, les octets doivent être copiés dans un nouvel emplacement 
+mémoire pour obtenir leur nouvelle représentation.
 
     aaa := int32(10)
     fmt.Printf("aaa := int32(10) %T [%v]\n", aaa, aaa)
@@ -106,17 +111,20 @@ Go ne propose de casting, mais une conversion. Au lieu de dire au compilateur de
     Sortie :
     aaa := int32(10) int32 [10]
 
-Go dispose d'un paquetage dans la bibliothèque standard appelé unsafe au cas où vous auriez besoin d'effectuer une opération de casting. Cependant, vous devriez vraiment éviter cela et faire preuve d'honnêteté envers vous-même sur les raisons pour lesquelles vous envisagez de l'utiliser. L'exécution d'une conversion offre le plus haut niveau d'intégrité pour ce type d'opérations.
+Go dispose d'un package dans la bibliothèque standard appelé `unsafe` au cas où vous auriez besoin d'effectuer une 
+opération de casting. Cependant, vous devriez vraiment éviter d'y avoir recours et vous questionner sur les raisons 
+qui vous poussent à l'envisager. L'exécution d'une conversion offre le plus haut niveau d'intégrité pour ce type
+d'opérations.
 
 ** Notes
 
-- L'objectif de tous les programmes et de toutes les parties de ces programmes est de transformer des données d'une forme à une autre.
-- Principalement, le code alloue, lit et écrit dans la mémoire.
-- Il est essentiel de comprendre les types pour écrire un bon code et comprendre le code.
+- L'objectif de tous les programmes et de leurs composants est de transformer des données d'une forme à une autre.
+- Le code consiste principalement à allouer, lire et écrire en mémoire.
+- La compréhension des types est essentielle pour comprendre et écrire du code de qualité.
 - Si vous ne comprenez pas les données, vous ne comprenez pas le problème.
-- Vous comprendrez mieux le problème en comprenant les données.
-- Lorsque les variables sont déclarées à leur valeur zéro, utilisez le mot-clé var.
-- Lorsque des variables sont déclarées et initialisées, utilisez l'opérateur court de déclaration de variables.
+- En comprenant les données, vous comprenez mieux le problème.
+- Pour déclarer les variables à leur valeur zéro, utilisez le mot-clé var.
+- Utilisez l'opérateur de déclaration de variable court pour déclarer et initialiser des variables simultanément.
 
 ** Lectures Supplémentaires
 
@@ -135,7 +143,8 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 *Partie* *A* : Déclarez trois variables initialisées à leur valeur zéro et trois variables déclarées avec une valeur littérale. Déclarez des variables de type string, int et bool.
 Affichez les valeurs de ces variables.
 
-*Partie* *B* : Déclarez une nouvelle variable de type float32 et initialisez-la en convertissant la valeur littérale de Pi (3.14).
+*Partie* *B* : Déclarez une nouvelle variable de type float32 et initialisez-la en convertissant la valeur littérale 
+de Pi (3.14).
 
 .play variables/exercise1.go
 .play variables/answer1.go
