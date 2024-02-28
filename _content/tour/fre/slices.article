@@ -16,16 +16,16 @@ Il est très bénéfique pour tous les programmeurs Go d'apprendre comment fonct
 
 ** Examen de Code
 
-- *Example* *1:* Déclaration et Longueur
-- *Example* *2:* Types de Reférence
-- *Example* *3:* Ajouter d'éléments dans les slices
-- *Example* *4:* Prélever des slices de slices
-- *Example* *5:* Slices et Reférences
-- *Example* *6:* Chaine de caractères slices
-- *Example* *7:* Fonctions variadic
-- *Example* *8:* Sémantiques de parcours
-- *Example* *9:* Parcours efficaces
-- *Example* *10:* Slices à 3 index
+- *Exemple* *1:* Déclaration et Longueur
+- *Exemple* *2:* Types de Reférence
+- *Exemple* *3:* Ajouter d'éléments dans les slices
+- *Exemple* *4:* Prélever des slices de slices
+- *Exemple* *5:* Slices et Reférences
+- *Exemple* *6:* Chaine de caractères slices
+- *Exemple* *7:* Fonctions variadic
+- *Exemple* *8:* Sémantiques de parcours
+- *Exemple* *9:* Parcours efficaces
+- *Exemple* *10:* Slices à 3 index
 
 .play slices/example1.go
 .play slices/example2.go
@@ -48,7 +48,7 @@ Construire une slice peut être fait de différentes façons.
     // Slice de chaine de caractères définie à son état vide.
     slice := []string{}
 
-    // Slice of string set with a length and capacity of 5.
+    // Slice de chaines de caractères avec une longueur de 5 et une capacité de 5.
     slice := make([]string, 5)
 
     // Slice de chaine de caractères définie avec une longueur de 5 et une  capacité de 8.
@@ -57,7 +57,7 @@ Construire une slice peut être fait de différentes façons.
     // Slice de chaine de caractères définie avec des valeur et une longueur et une  capacité de 5.
     slice := []string{"A", "B", "C", "D", "E"}
 
-Vous pouvez voir que la fonction intégrée `make`me permet de pré-allouer à la fois la longueur et la capacité 
+Vous pouvez voir que la fonction intégrée `make` permet de pré-allouer à la fois la longueur et la capacité 
 du tableau sous-jacent. Si le compilateur connaît la taille au moment de la compilation, le tableau sous-jacent 
 peut être construit sur le stack.
 
@@ -92,7 +92,7 @@ Dans cet exemple, la longueur de la slice est de 5 et j'essaye d'accéder au 6è
 
 ** Ligne Directrice pour la Sémantique des Données des Slices
 
-En général, si la donnée avec laquelle je travaille est une slice, alors j'utilise la sémantique par valeurs 
+En général, si la donnée avec laquelle je travaille est une slice, alors j'utilise la sémantique par valeur 
 pour déplacer la donnée dans mon programme. Cela inclus la déclaration de champs sur un type.
 
     func Foo(data []byte) []byte
@@ -105,15 +105,15 @@ pour déplacer la donnée dans mon programme. Cela inclus la déclaration de cha
 
 Cela vaut pour toutes les structures de données internes de Go (slices, maps, channels, interfaces, et fonctions).
 
-Une des raisons pour passer à la sémantique par pointeurs est si vous avez besoin de partager la slice pour 
-une opération de décodage ou de démarshalling. Utiliser de pointeurs pour ce type d'opération est acceptable, 
-mais documentez-la si ce n'est pas évident.
+Une des raisons pour lesquelles passer à la sémantique par pointeur est acceptable et si vous avez besoin de partager 
+la slice pour une opération de décodage ou de dé-sérialisation (unmarshalling). Utiliser des pointeurs pour ce type 
+d'opération est acceptable, mais documentez-la si nécessaire.
 
 ** Agencement de la Mémoire Contiguë
 
 L'idée derrière la slice est de disposer d'un tableau, qui est la structure de données la plus efficace 
 d'un point de vue du matériel. Cependant, vous avez toujours besoin de pouvoir être dynamique et efficace 
-au regard de la quantité de données nécessaires au moment de l'exécution et dans les besoins futurs.
+au regard de la quantité de données nécessaires, au moment de l'exécution et pour les besoins futurs.
 
     func main() {
         slice := make([]string, 5, 8)
@@ -144,12 +144,11 @@ Sortie :
 
 La fonction `inspectSlice` montre comment une slice possède un tableau sous-jacent contigu avec un pas prévisible. 
 Elle montre également comment une slice a une longueur et une capacité qui peuvent être différentes. 
-Remarquez que la fonction `print` n'itère que sur la longueur d'une slice
+Remarquez que la fonction `print` n'itère que sur la longueur d'une slice.
 
 ** Ajouts d'Éléments à une slice
 
-The language provides a built-in function called append to add values to an
-existing slice.
+Le langage fournit une fonction intégrée appelée `append` pour ajouter des valeurs à une slice existante.
 
     var data []string
 
@@ -158,12 +157,12 @@ existing slice.
     }
 
 La fonction `append` fonctionne avec une slice même lorsque celle-ci est initialisée à sa valeur zéro. 
-La conception de l'API de `append` est intéressante, car elle utilise la mutation via la sémantique par valeurs. 
+La conception de l'API de `append` est intéressante, car elle utilise la mutation via la sémantique par valeur. 
 La fonction `append` obtient sa propre copie de la valeur de la slice, la modifie, puis renvoie une copie à l'appelant.
 
 Pourquoi l'API est-elle conçue de cette façon ? Cela est dû au fait que le schéma courant consiste à employer 
-la sémantique par valeurs pour déplacer une slice dans un programme. Cette pratique doit être respectée même lors 
-d'une opération de mutation. De plus, la mutation basée sur la sémantique par valeurs est le moyen le plus sûr 
+la sémantique par valeur pour déplacer une slice dans un programme. Cette pratique doit être respectée même lors 
+d'une opération de mutation. De plus, la mutation basée sur la sémantique par valeur est le moyen le plus sûr 
 d'effectuer des modifications, car la mutation est réalisée sur une copie isolée des données détenue par la fonction.
 
 La fonction `append` maintient toujours un bloc de mémoire contigu pour le tableau sous-jacent de la slice, 
@@ -192,7 +191,7 @@ la croissance se fait par incréments de 25%.
 
 ** Découpage de Slices
 
-Les slices permettent d'éviter des copies et des allocations de mémoire supplémentaires sur le heap 
+Les slices permettent d'éviter des copies et des allocations de mémoire supplémentaires dans le heap 
 pour le tableau sous-jacent lorsqu'il est nécessaire d'isoler certains éléments de ce tableau pour 
 différentes opérations.
 
@@ -203,17 +202,17 @@ La syntaxe de découpage de slice est représenté par la notation [a:b] qui sig
     slice2 := slice1[2:4]
 
 La variable `slice2` est une nouvelle slice qui partage maintenant le même tableau sous-jacent que `slice1`. 
-Cependant, `slice2` ne permet d'accéder qu'aux éléments aux indexes 2 et 3 (C et D) du tableau sous-jacent 
+Cependant, `slice2` ne permet d'accéder qu'aux éléments aux index 2 et 3 (C et D) du tableau sous-jacent 
 de la slice d'origine. La longueur de `slice2` est de 2 et non de 5 comme pour `slice1`, et la capacité est de 3, 
 car il y a désormais 3 éléments à partir de cette position de pointeur.
 
 .image /tour/eng/static/img/sl4.png
 
-Une façon plus intuitive de comprendre le découpage de slice est de se concentrer sur la longueur en utilisant 
-la notation [a:a+len]. Cela signifie "de l'index `a` à l'index `a` plus la longueur", et permet de réduire les erreurs 
+Une façon plus intuitive de comprendre le découpage de slice consiste à se concentrer sur la longueur en utilisant 
+la notation [a:a+len], soit "de l'index `a` à l'index `a` plus la longueur". Cela permettra de réduire les erreurs 
 lors du calcul de nouvelles slices.
 
-en utilisant cette fonction d'inspection.
+En utilisant cette fonction d'inspection.
 
     func inspectSlice(slice []string) {
         fmt.Printf("Length[%d] Capacity[%d]\n", len(slice), cap(slice))
@@ -279,7 +278,7 @@ slices si le tableau sous-jacent est partagé.
 
 .image /tour/eng/static/img/sl5.png
 
-Que se passe-t-il si vous utilisez plutôt la fonction intégrée `append` ?
+Que se passerait-il si vous utilisiez plutôt la fonction intégrée `append` ?
 
     slice1 := []string{"A", "B", "C", "D", "E"}
     slice2 := slice1[2:4]
@@ -301,14 +300,13 @@ Sortie :
     [2] 0xc00007e040 CHANGED
 
 La fonction `append` provoque le même effet secondaire, mais de manière cachée. 
-Dans ce cas, l'augmentation de la longueur de `slice2` depuis sa capacité a modifié la valeur à l'adresse 0xc00007e040. 
+Dans ce cas, l'augmentation de la longueur de `slice2` depuis sa capacité, a modifié la valeur à l'adresse 0xc00007e040. 
 Malheureusement, cette adresse faisait déjà partie de la longueur de `slice1`.
-
 
 .image /tour/eng/static/img/sl6.png
 
 Une façon d'éviter cet effet secondaire consiste à utiliser une slice à trois indices lors de la construction de 
-slice2. Cela permet de garantir que la longueur et la capacité soient toutes deux égales à 2.
+`slice2`. Cela permet de garantir que la longueur et la capacité soient toutes deux égales à 2.
 
     slice1 := []string{"A", "B", "C", "D", "E"}
     slice2 := slice1[2:4:4]
@@ -328,7 +326,7 @@ Sortie :
     [1] 0xc00007e030 D
 
 La syntaxe pour une slice à trois indices est [a:b:c] où `b` et `c` doivent être égaux. En effet, [a-b] définit 
-la longueur et [a-c] définit la capacité. Ainsi, la longueur et la capacité de slice2 sont maintenant identiques.
+la longueur et [a-c] définit la capacité. Ainsi, la longueur et la capacité de `slice2` sont maintenant identiques.
 
 Maintenant, vous utilisez la fonction intégrée `append`de la meme façon qu'auparavant.
 
@@ -389,14 +387,14 @@ Sortie :
 Tant que la slice de destination a le type et la longueur appropriés, la fonction intégrée `copy` peut effectuer 
 une copie superficielle.
 
-** La Mutation de Slices Utilisent la Sémantique par Pointeurs
+** La Mutation de Slices Utilisent la Sémantique par Pointeur
 
-Il est important de se rappeler que même si vous utilisez la sémantique de valeurs pour déplacer une slice dans 
-le programme, lorsque vous lisez ou écrivez une slice, vous utilisez la sémantique par pointeurs. Partager des 
+Il est important de se rappeler que même si vous utilisez la sémantique de valeur pour déplacer une slice dans 
+le programme, lorsque vous lisez ou écrivez une slice, vous utilisez la sémantique par pointeur. Partager des 
 éléments individuels d'une slice avec différentes parties de votre programme peut entraîner des effets secondaires 
 indésirables.
 
-    // Construit une slice de 1 user, défini un pointeurr sur ce user,
+    // Construit une slice de 1 user, défini un pointeur sur ce user,
     // utilise le pointeur pour mettre à jour likes.
 
     users := make([]user, 1)
@@ -411,7 +409,7 @@ Sortie :
 
     User: 0 Likes: 1
 
-Une slice est utilisée pour maintenir une collection d'utilisateurs. Ensuite, un pointeur est défini sur 
+Une slice est utilisée pour maintenir une collection d'utilisateurs nommée `users`. Ensuite, un pointeur est défini sur 
 le premier utilisateur et utilisé pour mettre à jour les mentions "`likes`". La sortie montre que l'utilisation du 
 pointeur fonctionne.
 
@@ -419,10 +417,6 @@ pointeur fonctionne.
 
 Ensuite, un nouvel utilisateur est ajouté à la collection et le pointeur est à nouveau utilisé pour ajouter 
 un "`likes`" au premier utilisateur.
-
-
-Then a new user is appended to the collection and the pointer is used again to
-add a like to the first user. 
 
     // Ajoute un nouveau user à la collection. Utilise à nouveau un pointeur
     // pour mettre à jour likes.
@@ -447,13 +441,14 @@ pour le premier utilisateur n'a pas augmenté.
 
 Il faut être vigilant et savoir si une slice sera utilisée dans une opération d'ajout (`append`) au cours de 
 l'exécution du programme. La façon dont vous partagez la slice doit être soigneusement réfléchie. Partager des 
-indexes individuels n'est peut-être pas la meilleure solution. Partager l'entièreté de la slice peut également 
+index individuels n'est peut-être pas la meilleure solution. Partager la totalité de la slice peut également 
 poser problème lors des ajouts. Une meilleure approche consisterait probablement à utiliser une slice comme 
 champ d'une `struct` et à partager la valeur de cette `struct`.
 
 ** Efficacité du Parcours Linéaire
+
 L'élégance des slices réside dans leur capacité à permettre des parcours linéaires tout en partageant des données 
-efficacement grâce à la sémantique par valeurs, ce qui minimise les allocations dans le heap.
+efficacement, grâce à la sémantique par valeur, ce qui minimise les allocations dans le heap.
 
     x := []byte{0x0A, 0x15, 0x0e, 0x28, 0x05, 0x96, 0x0b, 0xd0, 0x0}
 
@@ -477,7 +472,7 @@ la slice d'octets n'est créée.
 - Les slices sont comme des tableaux dynamiques avec des fonctionnalités spéciales et intégrées.
 - Il existe une différence entre la longueur et la capacité des slices et chacune a son propre rôle.
 - Les slices permettent d'avoir plusieurs "vues" sur le même tableau sous-jacent.
-- Les tranches peuvent s'étendre en utilisant la fonction intégrée `append`.
+- Les slices peuvent croitre en utilisant la fonction intégrée `append`.
 
 ** Lectures Supplémentaires
 
@@ -498,12 +493,12 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 1
 
-*Partie* *A:* Déclarez une slice `nil` d'entiers. Créez une boucle qui ajoute 10 valeurs à la slice. Parcourez 
-la slice et affichez chaque valeur.
+*Partie* *A:* Déclarez une slice `nil` d'entiers. Créez une boucle qui ajoute dix valeurs à la slice. 
+Parcourez la slice et affichez chaque valeur.
 
-*Partie* *B:* Déclarez une slice de cinq chaînes de caractères et initialisez-la avec des valeurs littérales 
-de chaîne. Affichez tous les éléments. Prenez une slice des indexes un et deux et affichez la position de l'index 
-et la valeur de chaque élément dans la nouvelle slice.
+*Partie* *B:* Déclarez une slice de cinq chaînes de caractères et initialisez-la avec des valeurs littérales. 
+Affichez tous les éléments. Prenez une slice des index un et deux et affichez la position de l'index ainsi que
+la valeur de chaque élément dans la nouvelle slice.
 
 .play slices/exercise1.go		  
 .play slices/answer1.go
