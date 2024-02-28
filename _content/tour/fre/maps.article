@@ -11,13 +11,13 @@ Elle utilise un système de table de hachage et de bucket, qui maintient un bloc
 
 ** Analyse de Code
 
-- *Example* *1:* Déclarer, écrire, lire et supprimer
-- *Example* *2:* Clés absentes
-- *Example* *3:* Restriction des clés de map
-- *Example* *4:* Littéraux et parcours des maps
-- *Example* *5:* Tri des maps par clé
-- *Example* *6:* Obtenir l'adresse d'un élément
-- *Example* *7:* Les maps sont passées par référence
+- *Exemple* *1:* Déclarer, écrire, lire et supprimer
+- *Exemple* *2:* Clés absentes
+- *Exemple* *3:* Restriction des clés de map
+- *Exemple* *4:* Littéraux et parcours des maps
+- *Exemple* *5:* Tri des maps par clé
+- *Exemple* *6:* Obtenir l'adresse d'un élément
+- *Exemple* *7:* Les maps sont passées par référence
 
 .play maps/example1.go
 .play maps/example2.go
@@ -37,19 +37,19 @@ La déclaration et la construction d'une map peuvent être effectuées de plusie
     }
 
     // Construction d'une map définie à sa valeur zéro
-    // pouvant stocker des valeurs 'user' basées sur une clé de type string.
+    // pouvant stocker des valeurs 'user' basée sur une clé de type string.
     // Essayer d'utiliser cette map engendrera une erreur de runtime (panic).
     var users map[string]user
 
-    // Construction d'une map initialisée en utilsant make,
-    // pouvant stocker des valeurs 'user' basées sur une clé de type string.
+    // Construction d'une map initialisée en utilisant make,
+    // pouvant stocker des valeurs 'user' basée sur une clé de type string.
     users := make(map[string]user)
 
     // Construire une map initialisée en utilisant une construction littérale vide,
-    // pouvant stocker des valeurs 'user' basées sur une clé de type string.
+    // pouvant stocker des valeurs 'user' basée sur une clé de type string.
     users := map[string]user{}
 
-Une map initialisée avec sa valeur zéro n'est pas utilisable et entraînera l'arrêt brutal (panic) 
+Une map initialisée à sa valeur zéro n'est pas utilisable et entraînera l'arrêt brutal (panic) 
 de votre programme.
 L'utilisation de la fonction intégrée `make` et de la construction littérale permet de construire 
 une map prête à l'emploi.
@@ -121,9 +121,9 @@ Sortie :
 
 Pour effectuer une recherche par clé, les crochets sont utilisés avec la variable map. Deux valeurs peuvent 
 être renvoyées dans une recherche par clé : la valeur et un booléen qui indique si la valeur a été trouvée ou non. 
-Si vous n'avez pas besoin de le savoir, vous pouvez laisser la variable "exists" de côté.
+Si vous n'avez pas besoin de le savoir, vous pouvez laisser la variable `exists` de côté.
 
-Lorsqu'une clé n'est pas trouvée dans la map, l'opération renvoie la valeur zéro valeur du type de valeur de la map. 
+Lorsqu'une clé n'est pas trouvée dans la map, l'opération renvoie la valeur zéro du type de valeur de la map. 
 Vous pouvez le constater avec la recherche de la clé "Bill". N'utilisez pas la valeur zéro pour déterminer 
 l'existence d'une clé dans une map, car la valeur zéro peut être une valeur valide et correspondre à 
 la valeur réellement stockée pour la clé.
@@ -139,14 +139,14 @@ Tous les types ne peuvent pas être utilisés comme clé.
     type slice []user
     Users := make(map[slice]user)
 
-Erreur du Compilateur:
+Erreur du Compilateur :
 
     invalid map key type users
 
-Une slice est un bon exemple de type ne pouvant pas être utilisé comme clé. Seules les valeurs qui pouvant passer
+Une slice est un bon exemple de type ne pouvant pas être utilisé comme clé. Seules les valeurs pouvant passer
 par la fonction de hachage sont éligibles. Un bon moyen de reconnaître les types pouvant être utilisés comme clés 
-est de vérifier s'ils peuvent être utilisés dans une opération de comparaison. Vous ne pouvez pas comparer deux 
-valeurs de slice.
+est de vérifier s'ils peuvent être utilisés dans une opération de comparaison. Vous ne pouvez pas comparer les valeurs 
+de deux slices.
 
 ** Notes
 
@@ -170,7 +170,7 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 1
 
-Déclarer et créer une map de valeurs entières avec une chaîne de caractères comme clé.
+Déclarez et créez une map de valeurs entières avec une chaîne de caractères comme clé.
 Remplir la map avec cinq valeurs et parcourir la map pour afficher les paires clé/valeur.
 
 .play maps/exercise1.go
