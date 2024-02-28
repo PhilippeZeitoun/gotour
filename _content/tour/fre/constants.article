@@ -12,12 +12,12 @@ L'une des caractéristiques les plus uniques de Go est la façon dont le langage
 
 Les constantes peuvent être typées ou non typées. Lorsqu'une constante n'est pas typée, elle est considérée comme étant d'un genre (of a kind). Les constantes d'un type peuvent être implicitement converties par le compilateur. Tout cela se passe à la compilation et non à l'exécution.
 
-** Examen du code
+** Analyse du code
 
-- *Example* *1:* Déclarer et initialiser des constantes	
-- *Example* *2:* Système de type parallèle (Kind) (manquant)
-- *Example* *3:* iota			
-- *Example* *4:* Conversion implicite
+- *Exemple* *1:* Déclarer et initialiser des constantes	
+- *Exemple* *2:* Système de type parallèle (Kind) (manquant)
+- *Exemple* *3:* iota			
+- *Exemple* *4:* Conversion implicite
 
 .play constants/example1.go
 .play constants/example2.go
@@ -27,12 +27,13 @@ Les constantes peuvent être typées ou non typées. Lorsqu'une constante n'est 
     const ui = 12345     // kind: integer
     const uf = 3.141592  // kind: floating-point
 
-Les constantes numériques non typées ont une précision de 256 bits, comme indiqué dans la spécification du langage. Elles sont basées sur un 'genre'.
+Les constantes numériques non typées ont une précision de 256 bits, comme indiqué dans la spécification du langage. 
+Elles sont basées sur un 'genre'.
 
     const ti int     = 12345     // type: int
     const tf float64 = 3.141592  // type: float64
 
-Les constantes typées utilisent toujours le système de types des constantes, 
+Les constantes typées utilisent toujours le système de type des constantes, 
 mais leur précision est limitée.
 
     const myUint8 uint8 = 1000 // Compiler Error: constant 1000 overflows uint8
@@ -43,23 +44,23 @@ Cela ne fonctionne pas car le nombre 1000 est trop grand pour être stocké dans
 
 L'arithmétique de constante permet d'utiliser différents genres de constantes.
 La promotion de genre (Kind Promotion) est utilisée pour gérer ces différents scénarii.
-Tout cela se produit de manière implicite. La variable answer dans cet exemple sera 
+Tout cela se produit de manière implicite. La variable `answer` dans cet exemple sera 
 de type float64 et représente la valeur 0.999 avec une précision de 64 bits.
 
     const third = 1 / 3.0  // KindFloat = KindFloat(1) / KindFloat(3.0)
 
-LA troisième constante sera du genre flottant (float) et représentera 1/3 avec une précision de 256 bits.
+La constante `third` sera du genre flottant (float) et représentera 1/3 avec une précision de 256 bits.
 
     const zero = 1 / 3  // KindInt = KindInt(1) / KindInt(3)
 
-La constante zero sera de genre entier (int) et fixée à 0 car la division d'entiers n'a pas de reste.
+La constante `zero` sera de genre entier (int) et fixée à 0 car la division d'entiers n'a pas de reste.
 
     const one int8 = 1
     const two = 2 * one  // int8(2) * int8(1)
 
 Ceci est un exemple d'arithmétique de constantes sur des constantes avec et sans types.
 Dans ce cas, une constante d'un type spécifique (int8) aura la précédence sur une constante genrée (of a kind).
-La constante two sera de type int8 et sa valeur fixée à 2.
+La constante `two` sera de type int8 et sa valeur fixée à 2.
 
     const maxInt = 9223372036854775807
 
@@ -67,7 +68,7 @@ Ceci est la valeur entière max pour un entier de 64 bits.
 
     const bigger = 9223372036854775808543522345
 
-La constante bigger contient une valeur beaucoup plus grande qu'un entier de 64 bits. Elle peut la stockée car 
+La constante `bigger` contient une valeur beaucoup plus grande qu'un entier de 64 bits. Elle peut la stocker, car 
 les constantes d'un genre int ne sont pas limitées à une précision de 64 bits. 
 
     const bigger int64 = 9223372036854775808543522345
@@ -76,14 +77,14 @@ Erreur du compilateur :
 
     constant 9223372036854775808543522345 overflows int64
 
-Cependant, si bigger avait été une constante de type int64, la compilation aurait échoué.
+Cependant, si `bigger` avait été une constante de type int64, la compilation aurait échoué.
 
 ** IOTA
 
 IOTA permet de définir des constantes entières successives. Il est possible que le nom provienne de 
 la fonction entière ⍳ du langage de programmation APL. En APL, la fonction ⍳ 
 (représentée par la neuvième lettre de l'alphabet grec, iota) est utilisée pour créer un tableau 
-contenant une série d'entiers consécutifs croissants, de longueur spécifique, indexé à partir de zéro.
+contenant une série d'entiers consécutifs croissants, de longueur spécifique, indexés à partir de zéro.
 
     const (
         A1 = iota  // 0 : Débute à 0
@@ -96,7 +97,7 @@ Sortie :
 
     0 1 2
 
-Le mot-clé iota fonctionne à l'intérieur d'un bloc de constantes et commence par la valeur 0. 
+Le mot-clé `iota` fonctionne à l'intérieur d'un bloc de constantes et commence par la valeur 0. 
 Ensuite, pour chaque constante successive déclarée dans le bloc, iota s'incrémente de 1.
 
     const (
@@ -111,7 +112,7 @@ Sortie :
     0 1 2
 
 Il n'est pas nécessaire de répéter l'utilisation du mot-clé iota. La nature successive des constantes entières 
-est assumé une fois appliquée.
+est assumée une fois appliquée.
 
     const (
         A3 = iota + 1  // 1 : 0 + 1
@@ -124,7 +125,7 @@ Sortie :
 
     1 2 3
 
-Si vous ne souhaitez pas appliquer un modèle mathématique, vous pouvez effectuer des calculs. Ces calculs sont ensuite répétés avec une valeur croissante de iota
+Si vous ne souhaitez pas appliquer un modèle mathématique, vous pouvez effectuer des calculs. Ces calculs sont ensuite répétés avec une valeur croissante de iota.
 
     const (
         Ldate= 1 << iota  //  1 : Shift 1 to the left 0.  0000 0001
@@ -141,9 +142,9 @@ Sortie :
 
     1 2 4 8 16 32
 
-Vous pouvez utiliser cette fonctionnalité comme le fait le package Log pour définir des drapeaux (flags).
+Vous pouvez utiliser cette fonctionnalité comme le fait le `package Log` pour définir des flags (drapeaux).
 Dans ce cas, les opérations bit à bit sont appliquées avec des valeurs croissantes de iota pour calculer 
-les valeurs des drapeaux.
+les valeurs des flags.
 
 ** Notes
 
@@ -151,7 +152,7 @@ les valeurs des drapeaux.
 - Elles n'existent que lors de la compilation.
 - Les constantes non typées peuvent être converties de façon implicite, alors que les constantes et les variables 
 typées ne le peuvent pas.
-- Considérez aux constantes non typées comme ayant un genre (kind) et non un type.
+- Considérez les constantes non typées comme ayant un genre (kind) et non un type.
 - Apprendre les conversions explicites et implicites.
 - Découvrez la puissance des constantes et leur utilisation dans la bibliothèque standard.
 
@@ -167,9 +168,9 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 1
 
-*Partie* *A:* Déclarer une constante non typée et une typée puis afficher leurs valeurs
+*Partie* *A:* Déclarez une constante non typée et une typée, puis affichez leurs valeurs
 
-*Partie* *B:* Diviser une constante typée et une non-type puis affecter le résultat à une variable.
+*Partie* *B:* Divisez une constante typée et une non-typée, puis affectez le résultat à une variable.
 
 .play constants/exercise1.go
 .play constants/answer1.go
