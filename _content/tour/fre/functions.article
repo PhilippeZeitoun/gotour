@@ -15,13 +15,13 @@ Les fonctions en Go jouent un rôle central dans la structuration du code et enc
 propres, maintenables et efficaces. Comprendre comment déclarer, définir et utiliser les fonctions est essentiel
 pour écrire des programmes Go efficaces.
 
-** Examen de Code
+** Analyse de Code
 
-- *Example* *1:* Retourner plusieurs valeurs
+- *Exemple* *1:* Retourner plusieurs valeurs
 - *Example* *2:* Identifiant blanc/vide
-- *Example* *3:* Redéclarations
+- *Example* *3:* Re-déclarations
 - *Example* *4:* Fonctions Anonymes/Closures
-- *Example* *5:* Récupérer les panics.
+- *Example* *5:* Récupérer des Panics.
 
 .play functions/example1.go
 .play functions/example2.go
@@ -151,9 +151,9 @@ et dérouler le stack.
 
 - Les fonctions peuvent renvoyer plusieurs valeurs et la plupart renvoient une valeur d'erreur.
 - La valeur d'erreur devrait toujours être vérifiée dans le cadre de la logique de programmation.
-- L'identifiant blanc/vide peut être utilisé pour ignorer les valeurs de retour.
+- L'identifiant blanc/vide (`_`) peut être utilisé pour ignorer les valeurs de retour.
 - Syntaxe : func, receiver, identifier, [paramètre(s)], [retour(s)], bloc de code.
-- Paramètres variadiques, arguments variables et destructuration d'une slice.
+- Paramètres variadiques, arguments variadiques et destructuration d'une slice.
 - Les fonctions sont un type : vous pouvez utiliser des fonctions comme paramètres, arguments et retours.
 - Defer est utilisé pour planifier un appel de fonction dans une autre fonction.
 - Panic déclenche une erreur d'exécution et déroule le stack.
@@ -172,11 +172,11 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 ** Exercise 1
 
 *Partie* *A:* Déclarez un type de struct pour gérer des informations relatives à un utilisateur. 
-Déclarez une fonction qui en crée une valeur et renvoie un pointeur de ce type et une valeur d'erreur. 
+Déclarez une fonction qui en crée une valeur et renvoie un pointeur de ce type et erreur. 
 Appelez cette fonction à partir de main et affichez la valeur.
 
 *Partie* *B:* Faites un deuxième appel à votre fonction, mais cette fois-ci, ignorez la valeur 
-et testez uniquement la valeur d'erreur.
+et testez uniquement l'erreur.
 
 .play functions/exercise1.go		
 .play functions/answer1.go
