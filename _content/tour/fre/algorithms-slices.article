@@ -1,15 +1,14 @@
-Slice Operations
-This section provides examples that perform slice operations.
+Opérations sur les Slices
+Cette section fournie des exemples qui exécutent des opérations sur les slice.
 
-* Minimum Number
+* Nombre Minimum
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+  La permutation d'une chaine de caractère est l'ensemble de toutes les chaines qui contiennent
+  les mêmes caractères sans tenir compte de l'ordre des caractères.
 
-The sample program implements a function to retrieve the minimum integer
-from a slice of integers.
+Ce programme implémente une fonction pour trouver le plus petit entier dans une slice.
 
-*Diagram*
+*Diagramme*
 
     ┌────┐┌────┐┌────┐
     │ 10 ││ 30 ││ 15 │ ────▷ 10
@@ -21,12 +20,11 @@ from a slice of integers.
 
 .play algorithms/slices/min_number.go
 
-* Maximum Number
+* Nombre Maximum
 
-The sample program implements a function to retrieve the maximum integer
-from a slice of integers.
+Ce programme implémente une fonction pour retrouver l'entier le plus grand dans une slice.
 
-*Diagram*
+*Diagramme*
 
     ┌────┐┌────┐┌────┐
     │ 45 ││ 23 ││ 68 │ ────▷ 68
