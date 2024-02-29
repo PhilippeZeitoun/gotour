@@ -1,12 +1,12 @@
 Export
-L'export permet de spécifier si un identifiant est accessible au code en dehors du paquet dans lequel il est déclaré.
+L'export permet de spécifier si un identifiant est accessible au code en dehors du package dans lequel il est déclaré.
 
 * Export
 
 - [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
 - Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-L'export permet de spécifier si un identifiant est accessible au code en dehors du paquet dans lequel il est déclaré. 
+L'export permet de spécifier si un identifiant est accessible au code en dehors du package dans lequel il est déclaré. 
 
 ** Analyse de Code
 
@@ -22,7 +22,7 @@ L'export permet de spécifier si un identifiant est accessible au code en dehors
 .play exporting/example4.go
 .play exporting/example5.go
 
-** Mécaniques d'ExportExporting Mechanics
+** Mécaniques d'Export
 
 En Go, un package est l'unité de base du code compilé. Il représente une unité physique de code compilé, 
 généralement sous la forme d'une bibliothèque compilée sur le système d'exploitation hôte. L'exportation détermine 
@@ -100,12 +100,13 @@ En général, tous les champs appartiennent à l'une ou l'autre catégorie.
     }
 
 Dans ce scénario, même si le type `user` n'est pas exporté, il possède deux champs exportés. Cela signifie que 
-lorsque le type `user` est imbriqué dans le type exporté `Manager`, les champs `user` promus deviennent accessibles. 
-Il est courant d'avoir des types non exportés avec des champs exportés, car le `package reflect` ne peut fonctionner 
-qu'avec des champs exportés. Sinon, les sérialiseurs (marshallers) ne fonctionneront pas.
+lorsque le type `user` est imbriqué dans le type exporté `Manager`, les champs `user` sont promus et deviennent 
+accessibles. Il est courant d'avoir des types non exportés avec des champs exportés, car le `package reflect` 
+ne peut fonctionner qu'avec des champs exportés. Dans le cas contraire, les sérialiseurs (marshallers) 
+ne fonctionneront pas.
 
 L'exemple illustre une mauvaise situation où du code en dehors du package `user` peut construire un `Manager`, 
-mais comme le type imbriqué `user` n'est pas exporté, les champs de ce type peuvent être initialisés. Cela crée des
+même si le type imbriqué `user` n'est pas exporté, les champs de ce type peuvent être initialisés. Cela crée des
 problèmes de construction partielle qui mèneront à des bugs. Il est important d'être cohérent en termes d'exportation 
 et de non-exportation.
 
@@ -128,10 +129,11 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 *Partie* *A:* Créez un package nommé `toy` avec une seule struct exportée nommée `Toy`.
 Ajoutez les champs exportés `Name` et `Weight`. Ensuite, ajoutez deux champs non exportés nommés `onHand` et `sold`.
-Déclarez une fonction factory (usine) appelée `New` pour créer des valeurs de type `Toy` acceptant des paramètres pour 
+Déclarez une fonction "factory" (usine) appelée `New` pour créer des valeurs de type `Toy` acceptant des paramètres pour 
 les champs exportés. Enfin, déclarez des méthodes qui retournent et mettent à jour les valeurs des champs non exportés.
 
-*Partie* *B:* Créez un programme qui importe le package `toy`. Utilisez la fonction `New` pour créer une valeur de type `toy`. Ensuite, utilisez les méthodes pour définir et afficher les valeurs de `toy` 
+*Partie* *B:* Créez un programme qui importe le package `toy`. Utilisez la fonction `New` pour créer une valeur 
+de type `toy`. Ensuite, utilisez les méthodes pour définir et afficher la valeur de `toy` 
 
 .play exporting/exercise1.go
 .play exporting/answer1.go
