@@ -1,12 +1,11 @@
-Bit Operations
-This section provides examples that perform bit operations.
+Opérations sur les Bits
+Cette section fournie des exemples qui exécutent des opérations sur les bits.
 
-* Is Even Or Odd
+* Pair ou Impair
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-This sample program shows you how to check if an integer is even or odd
-using bit manipulation.
+Ce programme montre comment vérifier si un entier est pair ou impair en manipulant les bits.
 
 .play algorithms/bits/iseven.go
