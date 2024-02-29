@@ -1,20 +1,19 @@
-Number Operations
-This section provides examples that perform number operations.
+Opérations sur les Nombres
+Cette section fournie des exemples qui exécutent des opération sur les nombres.
 
 * Palindrome
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-The sample program implements a check to see if an integer is a
-palindrome or not.
+Ce programme implémente une vérification pour savoir si un entier est un palindrome ou non.
 
-- See more at [[https://en.wikipedia.org/wiki/Palindrome][https://en.wikipedia.org/wiki/Palindrome]]
+- En apprendre plus sur [[https://en.wikipedia.org/wiki/Palindrome][https://en.wikipedia.org/wiki/Palindrome]]
 
-*Diagram*
+*Diagramme*
 
-    A palindrome is a word, number, phrase, or other sequence of symbols that
-    reads the same backwards as forwards.
+    La permutation d'une chaine de caractère est l'ensemble de toutes les chaines qui contiennent 
+    les même caractères sans tenir compte de l'ordre des caractères.
 
     ┌───┐┌───┐┌───┐
     │ 1 ││ 0 ││ 1 │ ────▷ Palindrome
