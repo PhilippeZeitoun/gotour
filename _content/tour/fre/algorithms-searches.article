@@ -1,42 +1,41 @@
-Search Operations
-This section provides examples that perform search operations.
+Opérations de Recherche
+Cette section fournie des exemples qui exécutent des opérations de recherche.
 
-* Binary Search
+* Recherche Binaire
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-The sample program implements a function that performs an iterative
-binary search against set of integers.
+Ce programme implémente une fonction qui exécute une recherche binaire itérative sur un ensemble d'entiers.
 
-- See more at [[https://en.wikipedia.org/wiki/Binary_search_algorithm][https://en.wikipedia.org/wiki/Binary_search_algorithm]]
+- En apprendre plus sur [[https://en.wikipedia.org/wiki/Binary_search_algorithm][https://en.wikipedia.org/wiki/Binary_search_algorithm]]
 
-*Diagram*
+*Diagramme*
 
-    Binary search compares the target value to the middle element of the
-    array. If they are not equal, the half in which the target cannot lie
-    is eliminated and the search continues on the remaining half, again
-    taking the middle element to compare to the target value, and repeating
-    this until the target value is found. If the search ends with the
-    remaining half being empty, the target is not in the array
+    La recherche binaire compare la valeur cible à l'élément du milieu du tableau. 
+    Si elles ne sont pas égales, la moitié dans laquelle la cible ne peut pas se trouver 
+    est éliminée et la recherche se poursuit sur la moitié restante, en prenant à 
+    nouveau l'élément du milieu pour le comparer à la valeur cible. Ce processus se 
+    répète jusqu'à ce que la valeur cible soit trouvée. Si la recherche se termine 
+    avec la moitié restante vide, cela signifie que la cible ne se trouve pas dans le tableau.
 
     ┌────┐
-    │ 83 │                         ◁── Target Number
+    │ 83 │                         ◁── Nombre Cible
     └────┘
     ┌────┐┌────┐┌────┐┌────┐┌────┐
-    │ 04 ││ 42 ││ 80 ││ 83 ││ 95 │ ◁── Starting Array
+    │ 04 ││ 42 ││ 80 ││ 83 ││ 95 │ ◁── Tableau de Départ
     └────┘└────┘└────┘└────┘└────┘
-                ┌────┐             ◁── Middle Value
-                │ 80 │             ◁── Target Number Is Greater
+                ┌────┐             ◁── Valeur du Milieu
+                │ 80 │             ◁── Le Nombre Cible Est Plus Grand
                 └────┘
                       ┌────┐┌────┐
-                      │ 83 ││ 95 │ ◁── Search This Half
+                      │ 83 ││ 95 │ ◁── Recherche Dans Cette Moitié
                       └────┘└────┘
                       ┌────┐
-                      │ 83 │       ◁── Middle Value
+                      │ 83 │       ◁── Valeur du Milieu
                       └────┘
                       ┌────┐
-                      │ 83 │       ◁── Target Found / Idx 3
+                      │ 83 │       ◁── Cible Trouvée / Idx 3
                       └────┘
 
 .play algorithms/searches/binary_iterative.go
