@@ -13,8 +13,8 @@ Par conséquent, les schémas de conception qui s'appuient sur ces notions devra
 
 ** Analyse de Code
 
-- *Example* *1:* Regroupement par État
-- *Example* *2:* Regroupement par Comportement
+- *Exemple* *1:* Regroupement par État
+- *Exemple* *2:* Regroupement par Comportement
 
 .play composition/grouping/example1.go
 .play composition/grouping/example2.go
