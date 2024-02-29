@@ -9,9 +9,9 @@ Les interfaces donnent aux programmes une structure et encouragent la conception
 
 Les interfaces structurent les programmes et favorisent la conception par composition. 
 Elles permettent et encouragent une division claire et nette entre les composants. 
-La standardisation des interfaces permet de définir des attentes claires et cohérentes. 
+La standardisation des interfaces permet de définir des attentes claires et constantes. 
 Le découplage consiste à réduire les dépendances entre les composants et les types qu'ils utilisent. 
-Cela se traduit par une meilleure exactitude, qualité et maintenabilité du code.
+Cela se traduit par une meilleure précision, qualité et maintenabilité du code.
 
 ** Analyse de Code
 
@@ -35,11 +35,11 @@ Cela se traduit par une meilleure exactitude, qualité et maintenabilité du cod
 .play interfaces/example8.go
 .play interfaces/example9.go
 
-** Sémantique d' Interface
+** Sémantique d'Interface
 
 Les interfaces regroupent des données concrètes en fonction de leur comportement. 
 L'accent est mis sur ce que la donnée peut faire, indépendamment de sa nature. 
-Les interfaces contribuent également à découpler mon code des changements en demandant 
+Les interfaces contribuent également à découpler le code des changements en demandant 
 des données concrètes en fonction de leurs capacités. Il n'est pas limité à un seul type de données.
 
 Vous devez anticiper au mieux les évolutions futures des données afin d'utiliser des interfaces 
@@ -49,8 +49,8 @@ et non l'état. Elles doivent être formulées sous forme de verbes et non de no
 Les interfaces généralisées centrées sur le comportement sont les meilleures. Les interfaces avec 
 plusieurs méthodes ont plus d'une raison d'évoluer. Celles basées sur des noms ont tendance à être 
 moins réutilisables, plus sujettes aux changements et s'opposent à l'objectif des interfaces. 
-L'incertitude face au changement n'est pas une permission de deviner, mais une directive pour STOPPER 
-et en apprendre plus. Vous devez distinguer le code qui lutte contre la fraude de celui qui protège 
+L'incertitude face au changement n'est pas une permission de spéculer, mais une directive pour S'ARRÊTER 
+et en apprendre plus. Vous devez distinguer le code qui protège de la fraude de celui qui protège 
 contre les accidents.
 
 Utilisez une interface quand :
@@ -61,7 +61,7 @@ Utilisez une interface quand :
 
 N'utilisez pas d'interface :
 
-- Pour exploiter une interface.
+- Pour simplement exploiter une interface.
 - Pour généraliser un algorithme.
 - Lorsque les utilisateurs peuvent déclarer leurs propres interfaces.
 - Si les raisons de l'utilisation d'une interface ne sont pas clairs.
@@ -74,8 +74,8 @@ La première chose importante à comprendre est qu'un type d'interface déclare 
         read(b []byte) (int, error)
     }
 
-Le type reader n'est pas un type struct, mais un type interface. Sa déclaration n'est pas basée 
-sur l'état, mais sur le comportement. Les types Interface définissent un ensemble de méthodes que 
+Le type `reade`r n'est pas un type struct, mais un type interface. Sa déclaration n'est pas basée 
+sur l'état, mais sur le comportement. Les types interface définissent un ensemble de méthodes que 
 les données concrètes doivent implémenter pour satisfaire l'interface. Les types Interface n'ont pas 
 d'état concret, ils sont donc sans valeur.
 
@@ -85,8 +85,8 @@ En raison de leur absence de valeur, la construction d'une variable (comme `r`) 
 car dans notre modèle de programmation, `r` n'existe pas en soi, elle est sans valeur. Il n'y a rien 
 dans `r` que vous puissiez directement manipuler ou transformer. C'est un concept crucial à comprendre.
 Je ne travaille jamais directement avec des valeurs d'interfaces, mais uniquement avec des valeurs concrètes.
-Une interface a une représentation dans le compilateur (type interne), mais dans notre modèle de programmation, 
-les interfaces sont sans valeur.
+Une interface possède une représentation dans le compilateur (un type interne), mais au regard de notre 
+modèle de programmation, les interfaces sont sans valeur.
 
 ** Implémenter des Interfaces
 
@@ -113,7 +113,7 @@ on peut dire :
 "Le type concret `file` implémente maintenant l'interface `reader` en utilisant la sémantique par valeur."
 
 Chaque mot est important. En Go, il suffit de déclarer l'ensemble complet des méthodes comportementales 
-définies par une interface pour implémenter cette interface. Dans ce cas, c'est ce que j'ai fait puisque 
+définies par une interface pour implémenter cette interface. Dans ce cas, c'est ce qui ai fait puisque 
 l'interface reader ne déclare qu'un seul comportement nommé `read`.
 
     type reader interface {
@@ -135,13 +135,13 @@ on peut dire :
 
 "Le type concret `pipe` implémente maintenant l'interface `reader` en utilisant la sémantique par valeur."
 
-Maintenant, vous avez deux types concrets implémentant l'interface reader. Chaque type concret a sa propre implémentation. L'un lit des systèmes de fichiers, l'autre des réseaux.
+Maintenant, vous avez deux types concrets implémentant l'interface `reader`. Chaque type concret a sa propre 
+implémentation. L'un lit des systèmes de fichiers, l'autre des réseaux.
 
 ** Polymorphisme
 
 Le polymorphisme signifie qu'un fragment de code adapte son comportement en fonction des données qu'il manipule. 
-Cette définition, énoncée par Tom Kurtz, l'inventeur du langage BASIC, sera notre référence pour la suite.
-
+Cette définition, énoncée par Tom Kurtz, l'inventeur du langage BASIC, sera notre postulat pour la suite.
 
     // retrieve peut lire et traiter les données de n'importe quel appareil.
     func retrieve(r reader) error {
@@ -189,20 +189,19 @@ structure de données spéciale appelée iTable.
 L'iTable a deux objectifs :
 
 - Elle décrit le type de valeur stockée. Dans ce cas, il s'agit d'une valeur de type `file`.
-- Elle fournit des pointeurs de fonction vers les implémentations concrètes de l'ensemble de méthodes 
-- pour le type de valeur stockée.
+- Elle fournit des pointeurs de fonction vers les implémentations concrètes de l'ensemble de méthodes pour le type de valeur stockée.
 
 Lors de l'appel de la méthode `read` sur la valeur d'interface, une recherche dans l'iTable est effectuée 
 pour trouver l'implémentation concrète de la méthode `read` associée au type. Ensuite, l'appel de méthode 
 est effectué sur la valeur stockée dans le deuxième mot.
 
-On peut dire que `retrieve` est une fonction polymorphique car la valeur concrète `pipe` peut être passée à `retrieve`. 
+On peut dire que `retrieve` est une fonction polymorphique, car la valeur concrète `pipe` peut être passée à `retrieve`. 
 De ce fait, l'appel de `read` sur la valeur d'interface change son comportement. Cette fois, l'appel de `read` 
 lit un réseau au lieu de lire un fichier.
 
 ** Règles d'Ensemble de Méthodes
 
-Implémenter une interface en utilisant la sémantique par pointeurs impose certaines contraintes de 
+Implémenter une interface en utilisant la sémantique par pointeur impose certaines contraintes de 
 compatibilité d'interface.
 
     type notifier interface {
@@ -227,7 +226,7 @@ compatibilité d'interface.
         sendNotification(u)
     }
 
-L'interface `notifier` est implémentée par le type `user` en utilisant la sémantique par pointeurs. 
+L'interface `notifier` est implémentée par le type `user` en utilisant la sémantique par pointeur. 
 Lorsque la sémantique par valeur est utilisée pour effectuer l'appel polymorphe, le compilateur renvoie 
 le message suivant.
 
@@ -236,21 +235,21 @@ le message suivant.
 
 Cela se produit car les spécifications de Go définissent des règles strictes concernant les ensembles de méthodes. 
 Ces règles déterminent quelles méthodes sont associées à un type valeur et un type pointeur. 
-Elles sont mises en place pour garantir le plus haut niveau d'intégrité élevé dans votre programme.
+Elles sont mises en place pour garantir le plus haut niveau d'intégrité dans votre programme.
 
 Voici les règles définies par les spécifications du langage Go.
 
-- Pour toute valeur d'un type T, seul les méthodes implémentées avec un receveur pour ce type appartient 
+- Pour toute valeur d'un type T, seules les méthodes implémentées avec un receveur pour ce type appartiennent 
 à l'ensemble de méthodes de cette valeur.
 - Pour toute adresse mémoire d'un type T, toutes les méthodes implémentées pour ce type appartiennent à 
 l'ensemble de méthodes de cette valeur.
 
 En d'autres termes, lorsque vous travaillez avec une adresse (pointeur), toutes les méthodes implémentées 
 sont attachées et peuvent être appelées. En revanche, lorsque vous travaillez avec une valeur, 
-seules les méthodes implémentées avec des receveur de valeur sont attachées et peuvent être appelées.
+seules les méthodes implémentées avec des receveurs de valeur sont attachées et peuvent être appelées.
 
 Dans la leçon précédente sur les méthodes, vous pouviez appeler une méthode sur une donnée concrète, 
-quels que soient les sémantiques de données déclarées par le récepteur. En effet, le compilateur pouvait 
+quels que soient les sémantiques de données déclarées par le receveur. En effet, le compilateur pouvait 
 s'adapter pour effectuer l'appel. Dans le cas présent, une valeur est stockée dans une interface, 
 et les méthodes doivent exister. Aucun ajustement ne peut être effectué.
 
@@ -276,8 +275,8 @@ Erreur du Compilateur :
     cannot take the address of duration(42)
 
 Dans cet exemple, la valeur 42 est une constante de type int. Même si la valeur est convertie en une valeur 
-de type duration, elle n'est pas stockée dans une variable. Cela signifie que la valeur ne se trouve ni sur 
-le stack ni sur le heap. Elle n'a pas d'adresse. Les constantes existent uniquement au moment de la compilation.
+de type `duration`, elle n'est pas stockée dans une variable. Cela signifie que la valeur ne se trouve ni dans 
+le stack ni dans le heap. Elle n'a pas d'adresse. Les constantes existent uniquement au moment de la compilation.
 
 La deuxième raison est la plus importante. Le compilateur vous indique que vous ne pouvez pas utiliser la sémantique 
 par valeur si vous avez choisi d'utiliser la sémantique de pointeur. En d'autres termes, vous êtes obligé de partager 
@@ -295,7 +294,7 @@ polymorphe et partager `u`. La solution n'est pas de modifier la méthode pour q
 
 ** Slice de Type Interface
 
-Lorsque vous déclarez une slice d'un type d'interface, vous pouvez regrouper différentes valeurs concrètes 
+Lorsque vous déclarez une slice d'un type interface, vous pouvez regrouper différentes valeurs concrètes 
 en fonction de ce qu'elles peuvent faire. C'est pourquoi Go n'a pas besoin du concept de sous-typage. 
 Il ne s'agit pas d'un ADN commun, mais d'un comportement commun.
 
@@ -340,7 +339,7 @@ Sortie :
     Printer Name: PIXMA TR4520
     Printer Name: Home XP-4100
 
-Le code montre comment une slice du type d'interface `printer` permet de créer une collection de différents 
+Le code montre comment une slice du type interface `printer` permet de créer une collection de différents 
 types concrets d'imprimantes. En parcourant la collection et en exploitant le polymorphisme, l'appel à `p.print()` 
 change son comportement en fonction de la valeur concrète que le code manipule.
 
@@ -351,23 +350,26 @@ par pointeur est utilisée, toute modification de la valeur d'origine est reflé
 
 ** Notes
 
-- L'ensemble de méthodes pour une valeur comprend uniquement les méthodes implémentées avec un receveur de valeur.
+- L'ensemble de méthodes pour une valeur inclue uniquement les méthodes implémentées avec un receveur de valeur.
 - L'ensemble de méthodes pour un pointeur, inclus les méthodes implémentées avec des receveurs de pointeur et de valeur.
 - Les méthodes déclarées avec un receveur de pointeur, implémentent uniquement l'interface avec des valeurs de type pointeur.
   Les méthodes déclarées avec un receveur de valeur implémentent l'interface avec des valeurs et des pointeurs.
 - Les règles des ensembles de méthodes s'appliquent aux types Interface.
 - Les interfaces représentent des références, ne les partagez pas avec un pointeur.
-- C'est ainsi que nous créons un comportement polymorphe en Go.
+- C'est ainsi que nous créons un comportement polymorphique en Go.
 
 ** Citations
 
-"En programmation, le polymorphisme signifie que vous écrivez un programme unique qui se comporte différemment selon les données qu'il manipule." - Tom Kurtz (inventor of BASIC)
+"En programmation, le polymorphisme signifie que vous écrivez un programme unique qui se comporte différemment selon les 
+données qu'il manipule." - Tom Kurtz (inventor of BASIC)
 
 "L'interface vide ne dit rien." - Rob Pike
 
-"La conception est l'art d'organiser le code pour qu'il fonctionne aujourd'hui et qu'il puisse être modifié à jamais." - Sandi Metz
+"La conception est l'art d'organiser le code pour qu'il fonctionne aujourd'hui et qu'il puisse être modifié indéfiniment." 
+- Sandi Metz
 
-"Une bonne abstraction découple le code afin que chaque modification ne se répercute pas dans toute le code de base." - Ronna Steinburg
+"Une bonne abstraction découple le code afin que chaque modification ne se répercute pas dans tout le code de base." 
+- Ronna Steinburg
 
 ** Lectures Supplémentaires
 
@@ -392,12 +394,12 @@ Déclarez une struct nommée `english` qui représente une personne parlant angl
 pour une personne qui parle le chinois. 
 Implémentez l'interface `speaker` pour chaque structure en utilisant un receveur de valeur et les chaînes littérales
 "Hello World" et "你好世界". 
-Déclarez une variable de type `speaker` et assignez-lui l'adresse d'une valeur de type `english` et 
-appelez la méthode. 
+Déclarez une variable de type `speaker` et assignez-lui l'adresse d'une valeur de type `english` et appelez la méthode. 
 Faites-le à nouveau pour une valeur de type `chinese`.
 
 *Partie* *B:* Ajoutez une nouvelle fonction nommée `sayHello` qui accepte une valeur de type `speaker`. 
-Implémentez cette fonction afin d'appeler la méthode `speak` sur la valeur de l'interface. Ensuite, créez de nouvelles valeurs de chaque type et utilisez cette fonction.
+Implémentez cette fonction afin d'appeler la méthode `speak` sur la valeur de l'interface. Ensuite, 
+créez de nouvelles valeurs de chaque type et utilisez cette fonction.
 
 .play interfaces/exercise1.go
 .play interfaces/answer1.go
