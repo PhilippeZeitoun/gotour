@@ -1,21 +1,21 @@
 Méthodes
-Une fonction est appelée une méthode lorsqu'elle possède un receveur déclaré.
+Une fonction est appelée méthode lorsqu'elle possède un receveur déclaré.
 
 * Methods
 
 - [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
 - Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-Une fonction est appelée une méthode lorsqu'elle possède un receveur déclaré. Le receveur est le paramètre déclaré 
+Une fonction est appelée méthode lorsqu'elle possède un receveur déclaré. Le receveur est le paramètre déclaré 
 entre le mot-clé `func` et le nom de la fonction.
 
 ** Analyse de Code
 
-- *Example* *1:* Déclaration et comportement d'un receveur
-- *Example* *2:* Méthodes nommées et typées
-- *Example* *3:* Variables de Fonctions/Méthodes
-- *Example* *4:* Types Fonctions
-- *Example* *5:* Sémantiques par Valeur et par Pointeurs
+- *Exemple* *1:* Déclaration et comportement d'un receveur
+- *Exemple* *2:* Méthodes nommées et typées
+- *Exemple* *3:* Variables de Fonctions/Méthodes
+- *Exemple* *4:* Types Fonctions
+- *Exemple* *5:* Sémantiques par Valeur et par Pointeur
 
 .play methods/example1.go
 .play methods/example2.go
@@ -74,7 +74,7 @@ Cela fonctionne de la même manière lorsque la variable utilisée pour l'appel 
     bill.notify()
     bill.changeEmail("bill@hotmail.com")
 
-Dans ce cas, la variable `bill` est un pointeur vers une valeur de type utilisateur. Encore une fois, 
+Dans ce cas, la variable `bill` est un pointeur vers une valeur de type `user`. Encore une fois, 
 Go s'ajuste pour effectuer l'appel de méthode lors de l'appel de `notify`.
 
 Si Go ne s'ajustait pas, voici ce que vous devriez faire pour effectuer les mêmes appels de méthode.
@@ -96,7 +96,7 @@ d'un type. Cependant, n'oubliez pas que la lecture et l'écriture se font en uti
     type IP []byte
     type IPMask []byte
 
-Ces types sont déclarés dans le package net qui fait partie de la bibliothèque standard. Ils sont déclarés 
+Ces types sont déclarés dans le `package net` qui fait partie de la bibliothèque standard. Ils sont déclarés 
 avec un type sous-jacent qui est une slice d'octets. En raison de cela, ces types suivent les directives pour 
 les types de données internes.
 
@@ -121,7 +121,7 @@ les types de données internes.
 
 Avec la méthode `Mask`, la sémantique par valeur est utilisée pour le receveur, le paramètre et l'argument de retour. 
 Cette méthode accepte sa propre copie d'une valeur `Mask`, la modifie puis renvoie une copie de la modification. 
-Si cette méthode utilise la mutation par sémantique par valeur, ce n'est ni un accident, ni un hasard.
+Si cette méthode utilise la mutation par sémantique par valeur, ce n'est ni par accident, ni par hasard.
 
 Une fonction peut décider des données d'entrée et de sortie dont elle a besoin. Ce qu'elle ne peut pas décider, 
 c'est la sémantique des données concernant la façon dont les données entrent ou sortent. Les données dictent 
@@ -138,17 +138,16 @@ sémantique par valeur. Elle doit respecter la façon dont une slice est conçue
 
 La fonction `ipEmptyString` utilise également la sémantique par valeur pour l'entrée et la sortie. 
 Cette fonction accepte sa propre copie d'une valeur `IP` et renvoie une valeur `string`. Aucun usage 
-de la sémantique par référence n'est nécessaire car ce sont les données qui dictent la sémantique des données, 
+de la sémantique par pointeur n'est nécessaire, car ce sont les données qui dictent la sémantique des données, 
 et non la fonction.
 
-
 Une exception à l'utilisation de la sémantique par valeur se produit lorsque vous devez partager une slice 
-ou une map avec une fonction qui effectue un Unmarshalling ou un décodage.
+ou une map avec une fonction qui effectue une dé-sérialisation (unmarshalling) ou un décodage.
 
 ** Directives de Sémantique des Types de Données Struct
 
 En règle générale, lorsque vous travaillez avec un type struct, vous devez réfléchir à ce que représente 
-le type de données pour prendre une décision. Une bonne règle générale est de se demander si la struct 
+le type de données pour prendre une décision. Une bonne règle à suivre est de se demander si la struct 
 représente des données ou une API. Si la struct représente des données, utilisez la sémantique par valeur.
 Si le struct représente une API, utilisez la sémantique par pointeur.
 
@@ -162,7 +161,7 @@ Voici la struct `Time` du package time. Si l'on considère que `Time` représent
 par valeur devrait être utilisée pour cette struct.
 
 Lorsque vous examinez une base de code existante et que vous voulez savoir quelle sémantique de données a été choisie, 
-recherchez une fonction "factory". Le type de retour d'une fonction factory devrait indiquer la sémantique de données 
+recherchez une fonction "factory". Le type de retour d'une fonction "factory" devrait indiquer la sémantique de données 
 choisie par le développeur.
 
     func Now() Time {
@@ -209,8 +208,8 @@ Ces quatre méthodes du package time semblent enfreindre les directives de séma
 la sémantique par pointeur. Pourquoi ? Parce qu'elles implémentent une interface dont la signature de méthode 
 est verrouillée. Comme l'implémentation nécessite une mutation, la sémantique par pointeur est le seul choix possible.
 
-Voici une règle : si la sémantique par valeur est utilisée, vous pouvez passer à la sémantique par pointeur pour 
-certaines fonctions, à condition de ne pas laisser les données dans la chaîne d'appels restante, repasser à 
+Ligne de conduite : si la sémantique par valeur est utilisée, vous pouvez passer à la sémantique par pointeur pour 
+certaines fonctions, à condition de ne pas laisser repaser les données dans la chaîne d'appels restante à 
 la sémantique par valeur. Une fois que vous basculez vers la sémantique par pointeur, tous les appels suivants 
 à partir de ce point doivent rester en sémantique par pointeur. Il est impossible de passer de la sémantique 
 par pointeur à la sémantique par valeur. Il n'est jamais sûr de faire une copie d'une valeur vers laquelle 
@@ -220,7 +219,8 @@ pointe un pointeur.
         return OpenFile(name, O_RDONLY, 0)
     }
 
-La fonction `Open` du package os montre que lorsque l'on utilise une valeur de type `File`, la sémantique par pointeur est utilisée. Les valeurs de type `File` doivent être partagées et ne devraient jamais être copiées.
+La fonction `Open` du `package os` montre que lorsque l'on utilise une valeur de type `File`, la sémantique par pointeur est utilisée. 
+Les valeurs de type `File` doivent être partagées et ne devraient jamais être copiées.
 
 
     func (f *File) Chdir() error {
@@ -290,7 +290,7 @@ Parce que, les méthodes ne sont que des fonctions avec une syntaxe simplifiée,
 des fonctions. On peut voir que le receveur est réellement un paramètre, le premier paramètre de la fonction. 
 Lorsque vous appelez une méthode, le compilateur en interne la convertit en un appel de fonction.
 
-Remarque : N'exécutez pas les méthodes de cette façon, mais vous pouvez voir cette syntaxe dans les messages d'outils.
+Remarque : N'exécutez pas les méthodes de cette façon, m^rmr vous pouvez voir cette syntaxe dans les messages d'outils.
 
 ** Connaître le Comportement du Code
 
@@ -393,7 +393,7 @@ Cette sémantique est bien réelle et a un impact direct sur le comportement du 
 
 ** Notes
 
-- Les méthodes sont des fonctions qui déclarent une variable receveur.
+- Les méthodes sont des fonctions qui déclarent un paramètre receveur.
 - Les receveurs lient une méthode à un type et peuvent utiliser la sémantique par valeur ou par pointeur.
 - La sémantique par valeur signifie qu'une copie de la valeur est transmise aux limites du programme.
 - La sémantique par pointeur signifie qu'une copie de l'adresse de la valeur est transmise 
@@ -402,8 +402,7 @@ aux limites du programme.
 
 ** Citations
 
-"Methods are valid when it is practical or reasonable for a piece of data to expose a capability." - William Kennedy
-(Les méthodes sont valides lorsqu'il est pratique ou raisonnable qu'un élément de données expose une capacité.)
+"Les méthodes sont valides lorsqu'il est pratique ou raisonnable qu'un élément de données expose une capacité." - William Kennedy
 
 ** Lectures supplémentaires
 
@@ -417,12 +416,11 @@ Utilisez le modèle comme point de départ pour réaliser les exercices. Une sol
 
 ** Exercise 1
 
-Déclarez une struct qui représente un joueur de baseball. Incluez le nom, les passages au bâton (atBats) 
-et les coups sûrs (hits).
-Déclarez une méthode qui calcule la moyenne au bâton d'un joueur. La formule est
-hits / atBats.
+Déclarez une struct qui représente un joueur de baseball. Incluez le nom (name), le nombre de passages à 
+la batte (atBats) et le nombre de coups sûrs (hits).
+Déclarez une méthode qui calcule la moyenne à la batte d'un joueur. La formule est hits / atBats.
 Déclarez une slice de ce type et initialisez-la avec plusieurs joueurs. Parcourez la slice 
-en affichant le nom et la moyenne au bâton des joueurs.
+en affichant les noms et la moyenne à la batte des joueurs.
 
 .play methods/exercise1.go
 .play methods/answer1.go
