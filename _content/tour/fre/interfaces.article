@@ -1,28 +1,29 @@
 Interfaces
-Interfaces give programs structure and encourage design by composition. 
+Les interfaces donnent aux programmes une structure et encouragent la conception par composition.
 
 * Interfaces
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-Interfaces give programs structure and encourage design by composition. They enable
-and enforce clean divisions between components. The standardization of interfaces
-can set clear and consistent expectations. Decoupling means reducing the dependencies
-between components and the types they use. This leads to correctness, quality and
-maintainability.
 
-** Code Review 
+Les interfaces structurent les programmes et favorisent la conception par composition. 
+Elles permettent et encouragent une division claire et nette entre les composants. 
+La standardisation des interfaces permet de définir des attentes claires et cohérentes. 
+Le découplage consiste à réduire les dépendances entre les composants et les types qu'ils utilisent. 
+Cela se traduit par une meilleure exactitude, qualité et maintenabilité du code.
 
-- *Example* *1:* Repetitive Code That Needs Polymorphism
-- *Example* *2:* Polymorphism
-- *Example* *3:* Method Sets
-- *Example* *4:* Address Of Value
-- *Example* *5:* Storage By Value
-- *Example* *6:* Type Assertions
-- *Example* *7:* Conditional Type Assertions
-- *Example* *8:* The Empty Interface and Type Switches
-- *Example* *9:* Storing Values
+** Analyse de Code
+
+- *Exemple* *1:* Code redondant nécessitant du polymorphisme
+- *Exemple* *2:* Polymorphisme
+- *Exemple* *3:* Ensembles de méthodes
+- *Exemple* *4:* Adresse de Valeur
+- *Exemple* *5:* Stockage par Valeur
+- *Exemple* *6:* Assertions de Type
+- *Exemple* *7:* Assertions de Type Conditionnelles
+- *Exemple* *8:* Interface Vides et Sélecteurs de Type
+- *Exemple* *9:* Stocker des Valeurs
 
 .play interfaces/example1.go
 .play interfaces/example2.go
@@ -34,63 +35,63 @@ maintainability.
 .play interfaces/example8.go
 .play interfaces/example9.go
 
-** Interface Semantics
+** Sémantique d' Interface
 
-Interfaces allow you to group concrete data together by what the data can do.
-It’s about focusing on what data can do and not what the data is. Interfaces
-also help my code decouple itself from change by asking for concrete data based
-on what it can do. It’s not limited to one type of data.
+Les interfaces regroupent des données concrètes en fonction de leur comportement. 
+L'accent est mis sur ce que la donnée peut faire, indépendamment de sa nature. 
+Les interfaces contribuent également à découpler mon code des changements en demandant 
+des données concrètes en fonction de leurs capacités. Il n'est pas limité à un seul type de données.
 
-You must do my best to understand what data changes are coming and use interfaces
-to decouple my program from that change. Interfaces should describe behavior and
-not state. They should be verbs and not nouns.
+Vous devez anticiper au mieux les évolutions futures des données afin d'utiliser des interfaces 
+pour découpler votre programme de ces changements. Les interfaces doivent décrire le comportement 
+et non l'état. Elles doivent être formulées sous forme de verbes et non de noms.
 
-Generalized interfaces that focus on behavior are best. Interfaces with more than
-one method have more than one reason to change. Interfaces that are based on nouns,
-tend to be less reusable, are more susceptible to change, and defeat the purpose
-of the interface. Uncertainty about change is not a license to guess but a directive
-to STOP and learn more. You must distinguish between code that defends against
-fraud vs protects against accidents.
+Les interfaces généralisées centrées sur le comportement sont les meilleures. Les interfaces avec 
+plusieurs méthodes ont plus d'une raison d'évoluer. Celles basées sur des noms ont tendance à être 
+moins réutilisables, plus sujettes aux changements et s'opposent à l'objectif des interfaces. 
+L'incertitude face au changement n'est pas une permission de deviner, mais une directive pour STOPPER 
+et en apprendre plus. Vous devez distinguer le code qui lutte contre la fraude de celui qui protège 
+contre les accidents.
 
-Use an interface when:
+Utilisez une interface quand :
 
-- Users of the API need to provide an implementation detail.
-- API’s have multiple implementations they need to maintain internally.
-- Parts of the API that can change have been identified and require decoupling.
+- Les utilisateurs de l'API doivent fournir un détail d'implémentation.
+- Les API ont plusieurs implémentations qu'elles doivent gérer en interne.
+- Les parties de l'API susceptibles de changer ont été identifiées et nécessitent un découplage.
 
-Don't use an interface:
-    
-- For the sake of using an interface.
-- To generalize an algorithm.
-- When users can declare their own interfaces.
-- If it's not clear how the interface makes the code better.
+N'utilisez pas d'interface :
 
-** Interfaces Are Valueless
+- Pour exploiter une interface.
+- Pour généraliser un algorithme.
+- Lorsque les utilisateurs peuvent déclarer leurs propres interfaces.
+- Si les raisons de l'utilisation d'une interface ne sont pas clairs.
 
-The first important thing to understand is that an interface type declares a valueless type.
+** Les Interfaces n'ont pas de Valeurs
+
+La première chose importante à comprendre est qu'un type d'interface déclare un type sans valeur.
 
     type reader interface {
         read(b []byte) (int, error)
     }
 
-Type reader is not a struct type, but an interface type. Its declaration is not
-based on state, but behavior. Interface types declare a method-set of behavior
-that concrete data must exhibit in order to satisfy the interface. There is nothing
-\concrete about interface types, therefore they are valueless.
+Le type reader n'est pas un type struct, mais un type interface. Sa déclaration n'est pas basée 
+sur l'état, mais sur le comportement. Les types Interface définissent un ensemble de méthodes que 
+les données concrètes doivent implémenter pour satisfaire l'interface. Les types Interface n'ont pas 
+d'état concret, ils sont donc sans valeur.
 
     var r reader
 
-Because they are valueless, the construction of a variable (like r) is odd because
-in our programming model, r does not exist, it’s valueless. There is nothing about
-r itself that you can manipulate or transform. This is a critical concept to understand.
-I’m never working with interface values, only concrete values. An interface has a
-compiler representation (internal type), but from our programming model, interfaces
-are valueless.
+En raison de leur absence de valeur, la construction d'une variable (comme `r`) est particulière, 
+car dans notre modèle de programmation, `r` n'existe pas en soi, elle est sans valeur. Il n'y a rien 
+dans `r` que vous puissiez directement manipuler ou transformer. C'est un concept crucial à comprendre.
+Je ne travaille jamais directement avec des valeurs d'interfaces, mais uniquement avec des valeurs concrètes.
+Une interface a une représentation dans le compilateur (type interne), mais dans notre modèle de programmation, 
+les interfaces sont sans valeur.
 
-** Implementing Interfaces
+** Implémenter des Interfaces
 
-Go is a language that is about convention over configuration. When it comes to a
-concrete type implementing an interface, there is no exception.
+Go est un langage qui privilégie les conventions par rapport aux configurations. Lorsqu'un type concret 
+implémente une interface, il n'y a pas d'exception.
 
     type reader interface {
         read(b []byte) (int, error)
@@ -106,14 +107,14 @@ concrete type implementing an interface, there is no exception.
         return len(s), nil
     }
 
-The code declares a type named file and then declares a method named read. Because
-of these two declarations, you can say the following:
+Le code déclare un type nommé `file` et ensuite une méthode nommée `read`. En raison de ces deux déclarations, 
+on peut dire :
 
-"The concrete type file now implements the reader interface using value semantics"
+"Le type concret `file` implémente maintenant l'interface `reader` en utilisant la sémantique par valeur."
 
-Every word said is important. In Go, all you have to do is declare the full method-set
-of behavior defined by an interface to implement that interface. In this case, that is
-what I’ve done since the reader interface only declares a single act of behavior named read.
+Chaque mot est important. En Go, il suffit de déclarer l'ensemble complet des méthodes comportementales 
+définies par une interface pour implémenter cette interface. Dans ce cas, c'est ce que j'ai fait puisque 
+l'interface reader ne déclare qu'un seul comportement nommé `read`.
 
     type reader interface {
         read(b []byte) (int, error)
@@ -129,22 +130,20 @@ what I’ve done since the reader interface only declares a single act of behavi
         return len(s), nil
     }
 
-This code declares a type named pipe and then declares a method name read. Because
-of these two declarations, you can say the following:
+Ce code déclare un type nommé `pipe` et ensuite une méthode nommée `read`. En raison de ces deux déclarations, 
+on peut dire :
 
-"The concrete type pipe now implements the reader interface using value semantics"
+"Le type concret `pipe` implémente maintenant l'interface `reader` en utilisant la sémantique par valeur."
 
-Now you have two concrete types implementing the reader interface. Two concrete types
-each with their unique implementation. One type is reading file systems and the other
-networks.
+Maintenant, vous avez deux types concrets implémentant l'interface reader. Chaque type concret a sa propre implémentation. L'un lit des systèmes de fichiers, l'autre des réseaux.
 
-** Polymorphism
+** Polymorphisme
 
-Polymorphism means that a piece of code changes its behavior depending on the concrete
-data it’s operating on. This was said by Tom Kurtz, who is the inventor of BASIC. This
-is the definition we will use moving forward.
+Le polymorphisme signifie qu'un fragment de code adapte son comportement en fonction des données qu'il manipule. 
+Cette définition, énoncée par Tom Kurtz, l'inventeur du langage BASIC, sera notre référence pour la suite.
 
-    // retrieve can read any device and process the data.
+
+    // retrieve peut lire et traiter les données de n'importe quel appareil.
     func retrieve(r reader) error {
         data := make([]byte, 100)
 
@@ -157,16 +156,16 @@ is the definition we will use moving forward.
         return nil
     }
 
-Take a look at the type of data this function accepts. It wants a value of type reader.
-That’s impossible since reader is an interface and interfaces are valueless types.
-It can’t be asking for a reader value, they don’t exist.
+Regardez le type de données que cette fonction accepte. Elle attend une valeur de type `reader`. 
+C'est impossible, car `reader` est une interface et les interfaces sont des types sans valeur. 
+Elle ne peut pas demander une valeur `reader`, parce qu'elle n'existe pas.
 
-If the function is not asking for a reader value then what is the function asking
-for? It is asking for the only thing it can ask for, concrete data. 
+Si la fonction ne demande pas une valeur `reader`, alors que demande-t-elle ? Elle demande 
+la seule chose qu'elle puisse demander, des données concrètes.
 
-The function retrieve is a polymorphic function because it’s asking for concrete
-data not based on what the data is (concrete type), but based on what the data can
-do (interface type).
+La fonction `retrieve` est une fonction polymorphique, car elle demande des données concrètes, 
+non pas en fonction de ce qu'est la donnée (type concret), mais en fonction de ce que la donnée 
+peut faire (type d'interface).
 
     f := file{"data.json"}
     p := pipe{"cfg_service"}
@@ -174,37 +173,37 @@ do (interface type).
     retrieve(f)
     retrieve(p)
 
-You can construct two concrete values, one of type file and one of type pipe. Then
-you can pass a copy of each value to the polymorphic function. This is because each
-of these values implement the full method set of behavior defined by the reader interface.
+Vous pouvez construire deux valeurs concrètes, une de type `file` et une de type `pipe`. Ensuite, 
+vous pouvez passer une copie de chacune de ces valeurs à la fonction polymorphique. En effet, 
+chacune de ces valeurs implémente l'ensemble complet des comportements définis par l'interface `reader`.
 
-When the concrete file value is passed into retrieve, the value is stored inside a
-two word internal type representing the interface value.
+Lorsque la valeur concrète de type `file` est passée à la fonction `retrieve`, la valeur est stockée 
+dans un type interne à deux mots représentant la valeur d'interface.
 
 .image /tour/eng/static/img/i1.png
 
-The second word of the interface value points to the value being stored. In this
-case, it’s a copy of the file value since value semantics are at play. The first
-word points to a special data structure that is called the iTable.
+Le deuxième mot de la valeur d'interface pointe vers la valeur stockée. Dans ce cas, il s'agit d'une copie 
+de la valeur de type `file` car la sémantique par valeur est en jeu. Le premier mot pointe vers une 
+structure de données spéciale appelée iTable.
 
-The iTable serves 2 purposes:
+L'iTable a deux objectifs :
 
-- It describes the type of value being stored. In my case, it’s a file value.
-- It provides function pointers to the concrete implementations of the method set for the type of value being stored.
+- Elle décrit le type de valeur stockée. Dans ce cas, il s'agit d'une valeur de type `file`.
+- Elle fournit des pointeurs de fonction vers les implémentations concrètes de l'ensemble de méthodes 
+- pour le type de valeur stockée.
 
-When the read call is made against the interface value, an iTable lookup is performed
-to find the concrete implementation of the read method associated with the type.
-Then the method call is made against the value being stored in the second word.
+Lors de l'appel de la méthode `read` sur la valeur d'interface, une recherche dans l'iTable est effectuée 
+pour trouver l'implémentation concrète de la méthode `read` associée au type. Ensuite, l'appel de méthode 
+est effectué sur la valeur stockée dans le deuxième mot.
 
-You can say retrieve is a polymorphic function because the concrete value pipe can be
-passed into retrieve and now the call to read against the interface value changes
-its behavior. This time that call to read is reading a network instead of reading
-a file.
+On peut dire que `retrieve` est une fonction polymorphique car la valeur concrète `pipe` peut être passée à `retrieve`. 
+De ce fait, l'appel de `read` sur la valeur d'interface change son comportement. Cette fois, l'appel de `read` 
+lit un réseau au lieu de lire un fichier.
 
-** Method Set Rules
+** Règles d'Ensemble de Méthodes
 
-Implementing an interface using pointer semantics applies some constraints on
-interface compliance.
+Implémenter une interface en utilisant la sémantique par pointeurs impose certaines contraintes de 
+compatibilité d'interface.
 
     type notifier interface {
         notify()
@@ -228,37 +227,38 @@ interface compliance.
         sendNotification(u)
     }
 
-The notifier interface is implemented by the user type using pointer semantics.
-When value semantics are used to make the polymorphic call, the following compiler
-message is produced.
+L'interface `notifier` est implémentée par le type `user` en utilisant la sémantique par pointeurs. 
+Lorsque la sémantique par valeur est utilisée pour effectuer l'appel polymorphe, le compilateur renvoie 
+le message suivant.
 
     "cannot use u (type user) as type notifier in argument to sendNotification:
     user does not implement notifier (notify method has pointer receiver)"
 
-This is because there is a special set of rules in the specification about method
-sets. These rules define what methods are attached to values and pointers of a type.
-They are in place to maintain the highest level of integrity in my program.
+Cela se produit car les spécifications de Go définissent des règles strictes concernant les ensembles de méthodes. 
+Ces règles déterminent quelles méthodes sont associées à un type valeur et un type pointeur. 
+Elles sont mises en place pour garantir le plus haut niveau d'intégrité élevé dans votre programme.
 
-These are the rules defined in the specification:
+Voici les règles définies par les spécifications du langage Go.
 
-- For any value of type T, only those methods implemented with a value receiver for that type belong to the method set of that value.
-- For any address of type T, all methods implemented for that type belong to the method set of that value.
-      
-In other words, when working with an address (pointer), all methods implemented are
-attached and available to be called. When working with a value, only those methods
-implemented with value receivers are attached and available to be called.
+- Pour toute valeur d'un type T, seul les méthodes implémentées avec un receveur pour ce type appartient 
+à l'ensemble de méthodes de cette valeur.
+- Pour toute adresse mémoire d'un type T, toutes les méthodes implémentées pour ce type appartiennent à 
+l'ensemble de méthodes de cette valeur.
 
-In the previous lesson about methods, you were able to call a method against a
-concrete piece of data regardless of the data semantics declared by the receiver.
-This is because the compiler can adjust to make the call. In this case, a value is
-being stored inside an interface and the methods must exist. No adjustments can
-be made.
+En d'autres termes, lorsque vous travaillez avec une adresse (pointeur), toutes les méthodes implémentées 
+sont attachées et peuvent être appelées. En revanche, lorsque vous travaillez avec une valeur, 
+seules les méthodes implémentées avec des receveur de valeur sont attachées et peuvent être appelées.
 
-The question now becomes: Why can't methods implemented with pointer receivers be
-attached to values of type T? What is the integrity issue here?
+Dans la leçon précédente sur les méthodes, vous pouviez appeler une méthode sur une donnée concrète, 
+quels que soient les sémantiques de données déclarées par le récepteur. En effet, le compilateur pouvait 
+s'adapter pour effectuer l'appel. Dans le cas présent, une valeur est stockée dans une interface, 
+et les méthodes doivent exister. Aucun ajustement ne peut être effectué.
 
-One reason is because you can’t guarantee that every value of type T is addressable.
-If a value doesn’t have an address, it can’t be shared.
+La question est maintenant : Pourquoi les méthodes implémentées avec des receveurs de pointeurs ne peuvent-elles 
+pas être attachées à des valeurs de type T ? Quel est le problème d'intégrité ici ?
+
+Une des raisons est que vous ne pouvez pas garantir que chaque valeur de type T est adressable. Si une valeur 
+n'a pas d'adresse, elle ne peut pas être partagée.
 
     type duration int
 
@@ -270,37 +270,34 @@ If a value doesn’t have an address, it can’t be shared.
         duration(42).notify()
     }
 
-Compiler Error:
+Erreur du Compilateur :
 
     cannot call pointer method on duration(42)
     cannot take the address of duration(42)
 
-In this example, the value of 42 is a constant of kind int. Even though the value
-is converted into a value of type duration, it’s not being stored inside a variable.
-This means the value is never on the stack or heap. There isn’t an address. Constants
-only live at compile time.
+Dans cet exemple, la valeur 42 est une constante de type int. Même si la valeur est convertie en une valeur 
+de type duration, elle n'est pas stockée dans une variable. Cela signifie que la valeur ne se trouve ni sur 
+le stack ni sur le heap. Elle n'a pas d'adresse. Les constantes existent uniquement au moment de la compilation.
 
-The second reason is the bigger reason. The compiler is telling you that you are not
-allowed to use value semantics if you have chosen to use pointer semantics. In other
-words, you are being forced to share the value with the interface since it’s not
-safe to make a copy of a value that a pointer points to. If you chose to implement
-the method with pointer semantics, you are stating that a value of this type isn’t
-safe to be copied.
+La deuxième raison est la plus importante. Le compilateur vous indique que vous ne pouvez pas utiliser la sémantique 
+par valeur si vous avez choisi d'utiliser la sémantique de pointeur. En d'autres termes, vous êtes obligé de partager 
+la valeur avec l'interface dans la mesure où il n'est pas sûr de copier une valeur pointée par un pointeur. 
+En choisissant d'implémenter la méthode avec la sémantique par pointeur, vous indiquez qu'une valeur de ce type 
+ne peut pas être copiée en toute sécurité.
 
     func main() {
         u := user{"Bill", "bill@email.com"}
         sendNotification(&u)
     }
 
-To fix the compiler message, you must use pointer semantics on the call to the
-polymorphic function and share u. The answer is not to change the method to use
-value semantics.
+Pour résoudre le message du compilateur, vous devez utiliser la sémantique par pointeur lors de l'appel à la fonction
+polymorphe et partager `u`. La solution n'est pas de modifier la méthode pour qu'elle utilise la sémantique par valeur.
 
-** Slice of Interface
+** Slice de Type Interface
 
-When you declare a slice of an interface type, I’m capable of grouping different
-concrete values together based on what they can do. This is why Go doesn’t need
-the concept of sub-typing. It’s not about a common DNA, it’s about a common behavior.
+Lorsque vous déclarez une slice d'un type d'interface, vous pouvez regrouper différentes valeurs concrètes 
+en fonction de ce qu'elles peuvent faire. C'est pourquoi Go n'a pas besoin du concept de sous-typage. 
+Il ne s'agit pas d'un ADN commun, mais d'un comportement commun.
 
     type printer interface {
         print()
@@ -338,42 +335,41 @@ the concept of sub-typing. It’s not about a common DNA, it’s about a common 
         }
     }
 
-Output:
+Sortie : 
 
     Printer Name: PIXMA TR4520
     Printer Name: Home XP-4100
 
-The code shows how a slice of the interface type printer allows me to create a
-collection of different concrete printer types. Iterating over the collection and
-leveraging polymorphism since the call to p.print changes its behavior depending
-on the concrete value the code is operating against.
+Le code montre comment une slice du type d'interface `printer` permet de créer une collection de différents 
+types concrets d'imprimantes. En parcourant la collection et en exploitant le polymorphisme, l'appel à `p.print()` 
+change son comportement en fonction de la valeur concrète que le code manipule.
 
-The example also shows how the choice of data semantics changes the behavior of the
-program. When storing the data using value semantics, the change to the original
-value is not seen. This is because a copy is stored inside the interface. When
-pointer semantics are used, any changes to the original value are seen.
+L'exemple illustre également comment le choix de la sémantique de données modifie le comportement du programme. 
+En stockant les données en utilisant la sémantique par valeur, la modification de la valeur d'origine n'est pas visible.
+Cela s'explique par le fait qu'une copie est stockée à l'intérieur de l'interface. En revanche, lorsque la sémantique 
+par pointeur est utilisée, toute modification de la valeur d'origine est reflétée.
 
 ** Notes
 
-- The method set for a value, only includes methods implemented with a value receiver.
-- The method set for a pointer, includes methods implemented with both pointer and value receivers.
-- Methods declared with a pointer receiver, only implement the interface with pointer values.
-- Methods declared with a value receiver, implement the interface with both a value and pointer receiver.
-- The rules of method sets apply to interface types.
-- Interfaces are reference types, don't share with a pointer.
-- This is how we create polymorphic behavior in go.
+- L'ensemble de méthodes pour une valeur comprend uniquement les méthodes implémentées avec un receveur de valeur.
+- L'ensemble de méthodes pour un pointeur, inclus les méthodes implémentées avec des receveurs de pointeur et de valeur.
+- Les méthodes déclarées avec un receveur de pointeur, implémentent uniquement l'interface avec des valeurs de type pointeur.
+  Les méthodes déclarées avec un receveur de valeur implémentent l'interface avec des valeurs et des pointeurs.
+- Les règles des ensembles de méthodes s'appliquent aux types Interface.
+- Les interfaces représentent des références, ne les partagez pas avec un pointeur.
+- C'est ainsi que nous créons un comportement polymorphe en Go.
 
-** Quotes
+** Citations
 
-"Polymorphism means that you write a certain program and it behaves differently depending on the data that it operates on." - Tom Kurtz (inventor of BASIC)
+"En programmation, le polymorphisme signifie que vous écrivez un programme unique qui se comporte différemment selon les données qu'il manipule." - Tom Kurtz (inventor of BASIC)
 
-"The empty interface says nothing." - Rob Pike
+"L'interface vide ne dit rien." - Rob Pike
 
-"Design is the art of arranging code to work today, and be changeable forever." - Sandi Metz
+"La conception est l'art d'organiser le code pour qu'il fonctionne aujourd'hui et qu'il puisse être modifié à jamais." - Sandi Metz
 
-"A proper abstraction decouples the code so that every change doesn’t echo throughout the entire code base." - Ronna Steinburg
+"Une bonne abstraction découple le code afin que chaque modification ne se répercute pas dans toute le code de base." - Ronna Steinburg
 
-** Extra Reading
+** Lectures Supplémentaires
 
 - [[https://golang.org/doc/effective_go.html#interfaces][Interfaces]]    
 - [[https://blog.golang.org/laws-of-reflection][The Laws of Reflection]] - Rob Pike    
@@ -387,20 +383,21 @@ pointer semantics are used, any changes to the original value are seen.
 
 * Exercises
 
-Use the template as a starting point to complete the exercises. A possible solution is provided.
+Utilisez le modèle comme point de départ pour réaliser les exercices. Une solution possible est fournie.
 
 ** Exercise 1
 
-*Part* *A:* Declare an interface named speaker with a method named speak. Declare a
-struct named english that represents a person who speaks english and declare a struct
-named chinese for someone who speaks chinese. Implement the speaker interface for each
-struct using a value receiver and these literal strings "Hello World" and "你好世界".
-Declare a variable of type speaker and assign the address of a value of type english
-and call the method. Do it again for a value of type chinese.
+*Partie* *A:* Déclarez une interface nommée `speaker` avec une méthode nommée `speak`. 
+Déclarez une struct nommée `english` qui représente une personne parlant anglais et une struct nommée `chinese`
+pour une personne qui parle le chinois. 
+Implémentez l'interface `speaker` pour chaque structure en utilisant un receveur de valeur et les chaînes littérales
+"Hello World" et "你好世界". 
+Déclarez une variable de type `speaker` et assignez-lui l'adresse d'une valeur de type `english` et 
+appelez la méthode. 
+Faites-le à nouveau pour une valeur de type `chinese`.
 
-*Part* *B:* Add a new function named sayHello that accepts a value of type speaker.
-Implement that function to call the speak method on the interface value. Then create
- new values of each type and use the function.
+*Partie* *B:* Ajoutez une nouvelle fonction nommée `sayHello` qui accepte une valeur de type `speaker`. 
+Implémentez cette fonction afin d'appeler la méthode `speak` sur la valeur de l'interface. Ensuite, créez de nouvelles valeurs de chaque type et utilisez cette fonction.
 
 .play interfaces/exercise1.go
 .play interfaces/answer1.go
