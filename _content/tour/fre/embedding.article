@@ -1,43 +1,28 @@
-Embedding
-Embedding types provide the final piece of sharing and reusing state and behavior between types.
+Imbrication
+L'imbrication de types (Embedding) est le mécanisme final permettant le partage et la réutilisation de l'état et du comportement entre les types.
 
-* Embedding
+* Imbrication
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-Embedding types provide the final piece of sharing and reusing state and behavior
-between types. Through the use of inner type promotion, an inner type's fields and
-methods can be directly accessed by references of the outer type.
+L'imbrication de types (Embedding) est le mécanisme final permettant le partage et la réutilisation de l'état et du comportement entre les types. Grâce à la promotion des types internes, les champs et méthodes d'un type interne peuvent être directement accessibles par des références au type externe.
 
-** Code Review
+** Analyse de Code
 
-- *Example* *1:* Declaring Fields			   
-- *Example* *2:* Embedding types
-- *Example* *3:* Embedded types and interfaces
-- *Example* *4:* Outer and inner type interface implementations
+- *Exemple* *1:* Déclaration de champs		   
+- *Exemple* *2:* Imbrication de types
+- *Exemple* *3:* Types imbriqués et interfaces
+- *Exemple* *4:* Implémentations d'interfaces pour les types externes et internes
 	
 .play embedding/example1.go
 .play embedding/example2.go
 .play embedding/example3.go		   
 .play embedding/example4.go
 
-** Embedding Mechanics
+** Mécaniques d'Imbrication
 
-This first example does not show embedding, just the declaration of two struct
-types working together as a field from one type to the other.
-
-    type user struct {
-        name  string
-        email string
-    }
-
-    type admin struct {
-        person user        // NOT Embedding
-        level  string
-    }
-
-This is embedding.
+Ce premier exemple ne montre pas d'imbrication, mais uniquement la déclaration de deux types de structures fonctionnant ensemble comme un champ d'un type à l'autre.
 
     type user struct {
         name  string
@@ -45,12 +30,11 @@ This is embedding.
     }
 
     type admin struct {
-        user               // Value Semantic Embedding
+        person user        // PAS d'imbrication
         level  string
     }
 
-The person field is removed and just the type name is left. You can also embed a
-type using pointer semantics.
+Ceci est de l'imbrication.
 
     type user struct {
         name  string
@@ -58,17 +42,31 @@ type using pointer semantics.
     }
 
     type admin struct {
-        *user              // Pointer Semantic Embedding
+        user               // Imbrication par Sémantique par Valeur
         level  string
     }
 
-In this case, a pointer of the type is embedded. In either case, accessing the
-embedded value is done through the use of the type’s name.
+Le champ `person` est supprimé et seul le nom du type est conservé. Il est également possible d'imbriquer 
+un type en utilisant la sémantique par pointeurs.
 
-The best way to think about embedding is to view the user type as an inner type and
-admin as an outer type. It’s this inner/outer type relationship that is magical
-because with embedding, everything related to the inner type (both fields and methods)
-can be promoted up to the outer type. 
+    type user struct {
+        name  string
+        email string
+    }
+
+    type admin struct {
+        *user              // Imbrication par Sémantique par Pointeur
+        level  string
+    }
+
+Dans ce cas, un pointeur de type `user` est imbriqué. Dans les deux cas, l'accès à la valeur imbriquée se fait 
+en utilisant le nom du type.
+
+
+La meilleure façon de comprendre l'imbrication est de considérer le type `user` comme un type interne 
+et le type `admin` comme un type externe. C'est cette relation de type interne/externe qui est "magique" 
+car avec l'imbrication, tout ce qui est lié au type interne (champs et méthodes) peut être promu vers 
+le type externe.
 
     type user struct {
         name  string
@@ -82,7 +80,7 @@ can be promoted up to the outer type.
     }
 
     type admin struct {
-        *user              // Pointer Semantic Embedding
+        *user              // Imbrication par Sémantique par Pointeur
         level  string
     }
 
@@ -99,18 +97,18 @@ can be promoted up to the outer type.
         ad.notify() // Outer type promotion
     }
 
-Output:
+Sortie :
 
     Sending user email To john smith<john@yahoo.com>
     Sending user email To john smith<john@yahoo.com>
 
-Once you add a method named notify for the user type and then a small main function.
-You can see the output is the same whether you call the notify method through the inner
-pointer value directly or through the outer type value. The notify method declared for
-the user type is accessible directly by the admin type value.
+Une fois ajouté une méthode nommée `notify` au type `user` et une petite fonction `main`, vous pouvez constater 
+que la sortie est identique, que vous appeliez la méthode `notify` via la valeur interne du pointeur ou via la valeur 
+du type externe. La méthode `notify` déclarée pour le type `user` est accessible directement par la valeur 
+du type `admin`.
 
-Though this looks like inheritance, you must be careful. This is not about reusing
-state, but about promoting behavior.
+Bien que cela ressemble à de l'héritage, il faut être prudent. Il ne s'agit pas ici de réutiliser l'état, 
+mais bien de promouvoir le comportement.
 
     type notifier interface {
         notify()
@@ -120,12 +118,12 @@ state, but about promoting behavior.
         n.notify()
     }
 
-Now you add an interface and a polymorphic function that accepts any concrete value
-that implements the full method set of behavior defined by the notifier interface.
-Which is just a method named notify.
+Maintenant, ajoutons une interface et une fonction polymorphe qui accepte toute valeur concrète implémentant 
+l'ensemble complet des méthodes définies par l'interface `notifier`. Cette interface ne contient qu'une seule 
+méthode nommée `notify`.
 
-Because of embedding and promotion, values of type admin now implement the notifier
-interface.
+En raison de l'imbrication et de la promotion, les valeurs de type `admin` implémentent désormais 
+l'interface `notifier`.
 
     func main() {
         ad := admin{
@@ -139,15 +137,15 @@ interface.
         sendNotification(&ad)
     }
 
-Output:
+Sortie :
 
     Sending user email To john smith<john@yahoo.com>
 
-You can send the address of the admin value into the polymorphic function since
-embedding promotes the notify behavior up to the admin type.
+Vous pouvez transmettre l'adresse de la valeur `admin` à la fonction polymorphe, car l'imbrication promeut 
+le comportement `notify` vers le type `admin`.
 
     type admin struct {
-        *user  // Pointer Semantic Embedding
+        *user  // Imbrication par Sémantique par Valeur
         level  string
     }
 
@@ -157,8 +155,7 @@ embedding promotes the notify behavior up to the admin type.
             a.email)
     }
 
-When the outer type implements a method already implemented by the inner type,
-the promotion doesn’t take place.
+Lorsque le type externe implémente déjà une méthode implémentée par le type interne, la promotion n'a pas lieu. 
 
     func main() {
         ad := admin{
@@ -172,33 +169,33 @@ the promotion doesn’t take place.
         sendNotification(&ad)
     }
 
-Output:
+Sortie :
     
     Sending admin email To john smith<john@yahoo.com>
 
-You can see the outer type’s method is now being executed.
+Vous pouvez voir que la méthode du type externe est maintenant exécutée.
 
 ** Notes
 
-- Embedding types allow us to share state or behavior between types.
-- The inner type never loses its identity.
-- This is not inheritance.
-- Through promotion, inner type fields and methods can be accessed through the outer type.
-- The outer type can override the inner type's behavior.
+- L'imbrication de types permet de partager des états ou des comportements entre les types.
+- Le type interne conserve toujours son identité.
+- Ce n'est pas de l'héritage.
+- Grâce à la promotion, les champs et méthodes du type interne sont accessibles via le type externe.
+- Le type externe peut surcharger le comportement du type interne.
 
-** Extra Reading
+** Lectures Supplémentaires
 
 - [[https://www.ardanlabs.com/blog/2014/05/methods-interfaces-and-embedded-types.html][Methods, Interfaces and Embedded Types in Go]] - William Kennedy    
 - [[https://rakyll.org/typesystem/][Embedding is not inheritance]] - JBD  
 
 * Exercises
 
-Use the template as a starting point to complete the exercises. A possible solution is provided.
+Utilisez le modèle comme point de départ pour réaliser les exercices. Une solution possible est fournie.
 
 ** Exercise 1
 
-Edit the code from the template. Add a new type CachingFeed which embeds Feed and
-overrides the Fetch method.
+Éditez le code depuis le template. Ajouter un nouveau type `CachingFeed` qui imbrique `Feed`et surcharge 
+la méthode `Fetch`.
 
 .play embedding/exercise1.go
 .play embedding/answer1.go
