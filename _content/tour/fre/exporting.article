@@ -1,21 +1,20 @@
-Exporting
-Exporting provides the ability to declare if an identifier is accessible to code outside of the package it’s declared in. 
+Export
+L'export permet de spécifier si un identifiant est accessible au code en dehors du paquet dans lequel il est déclaré.
 
-* Exporting
+* Export
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-Exporting provides the ability to declare if an identifier is accessible to code
-outside of the package it’s declared in. 
+L'export permet de spécifier si un identifiant est accessible au code en dehors du paquet dans lequel il est déclaré. 
 
-** Code Review
+** Analyse de Code
 
-- *Example* *1:* Declare and access exported identifiers
-- *Example* *2:* Declare unexported identifiers and restrictions
-- *Example* *3:* Access values of unexported identifiers
-- *Example* *4:* Unexported struct type fields
-- *Example* *5:* Unexported embedded types
+- *Exemple* *1:* Déclarer et accéder aux identifiants exportés
+- *Exemple* *2:* Déclarer des identifiants non exportés et leurs restrictions
+- *Exemple* *3:* Accéder aux valeurs des identifiants non exportés
+- *Exemple* *4:* Champs de type struct non exportés
+- *Exemple* *5:* Types imbriqués non exportés
 
 .play exporting/example1.go
 .play exporting/example2.go
@@ -23,27 +22,25 @@ outside of the package it’s declared in.
 .play exporting/example4.go
 .play exporting/example5.go
 
-** Exporting Mechanics
+** Mécaniques d'ExportExporting Mechanics
 
-A package is the basic unit of compiled code in Go. It represents a physical compiled
-unit of code, usually as a compiled library on the host operating system. Exporting
-determines access to identifiers across package boundaries.
+En Go, un package est l'unité de base du code compilé. Il représente une unité physique de code compilé, 
+généralement sous la forme d'une bibliothèque compilée sur le système d'exploitation hôte. L'exportation détermine 
+l'accès aux identifiants entre les différents packages.
 
     package counters
 
     type AlertCounter int
 
-In this case, since a capital letter is being used to name the type AlterCounter,
-the type is exported and can be referenced directly by code outside of the
-counters package.
+Dans ce cas, comme le type `AlterCounter` est nommé avec une majuscule, il est exporté et peut être directement 
+référencé par du code en dehors du package `counters`.
 
     package counters
 
     type alertCounter int
 
-Now that you changed the type’s name to start with a lowercase letter, the type is
-unexported. This means only code inside the counters package can reference this
-type directly.
+En renommant le type avec une minuscule, il n'est désormais plus exporté. Cela signifie que seul le code à l'intérieur 
+du package `counters` peut le référencer directement.
 
     package counters
 
@@ -53,9 +50,9 @@ type directly.
         return alertCounter(value)
     }
 
-Even though the code above is legal syntax and will compile, there is no value in it.
-Returning a value of an unexported type is confusing since the caller (who will
-probably exist in a different package) can’t reference the type name directly.
+Même si le code ci-dessus est syntaxiquement correct et compilable, il n'a aucune utilité. 
+Renvoyer une valeur d'un type non exporté est source de confusion, car l'appelant (qui se trouvera probablement 
+dans un autre package) ne peut pas référencer directement le nom du type.
 
     package main
 
@@ -70,11 +67,10 @@ probably exist in a different package) can’t reference the type name directly.
         fmt.Printf("Counter: %d\n", counter)
     }
 
-In this case, the main function in package main calls the counters.New function
-successfully and the compiler can declare and construct a variable of the unexported
-type. This doesn't mean you should do this nor does it mean your're getting any real
-protections for this. This should be avoided, and if New will return a value, it
-should be of an exported type.
+Dans ce cas, la fonction `main` dans le `package main` appelle la fonction `counters.New` avec succès et le compilateur
+peut déclarer et construire une variable du type non exporté. Cela ne signifie pas qu'il faut le faire, 
+et cela ne signifie pas non plus que vous bénéficierez d'une protection réelle. Cette pratique doit être évitée, 
+et si `New` doit retourner une valeur, celle-ci doit être d'un type exporté.
 
     package users
 
@@ -85,11 +81,11 @@ should be of an exported type.
         password string
     }
 
-When it comes to fields in a struct, the first letter declares if the field is
-accessible to code outside of the package it’s declared in. In this case, Name
-and ID are accessible, but password is not. It’s an idiom to separate exported
-and unexported fields in this manner if this is reasonable or practical to do.
-Normally all fields would be one or the other.
+En ce qui concerne les champs d'une struct, la première lettre détermine si le champ est accessible au code en 
+dehors du package dans lequel il est déclaré. Dans ce cas, `Name` et `ID` sont accessibles, contrairement à `password`. 
+C'est une convention courante de séparer les champs exportés et non exportés de cette manière, lorsque cela 
+est raisonnable et pratique. 
+En général, tous les champs appartiennent à l'une ou l'autre catégorie.
 
     package users
 
@@ -103,43 +99,39 @@ Normally all fields would be one or the other.
         user
     }
 
-In this scenario, even though the user type is unexported, it has two exported
-fields. This means that when the user type is embedded in the exported Manager
-type, the user fields promote and are accessible. It’s common to have types that
-are unexported with exported fields because the reflection package can only operate
-on exported fields. Marshallers won’t work otherwise.
+Dans ce scénario, même si le type `user` n'est pas exporté, il possède deux champs exportés. Cela signifie que 
+lorsque le type `user` est imbriqué dans le type exporté `Manager`, les champs `user` promus deviennent accessibles. 
+Il est courant d'avoir des types non exportés avec des champs exportés, car le `package reflect` ne peut fonctionner 
+qu'avec des champs exportés. Sinon, les sérialiseurs (marshallers) ne fonctionneront pas.
 
-The example creates a bad situation where code outside of package users can construct
-a Manager, but since the embedded type user is unexported, the fields for those type
-can be initialized. This creates partial construction problems that will lead to bugs.
-You need to be consistent with exporting and unexporting.
+L'exemple illustre une mauvaise situation où du code en dehors du package `user` peut construire un `Manager`, 
+mais comme le type imbriqué `user` n'est pas exporté, les champs de ce type peuvent être initialisés. Cela crée des
+problèmes de construction partielle qui mèneront à des bugs. Il est important d'être cohérent en termes d'exportation 
+et de non-exportation.
 
 ** Notes
 
-- Code in go is compiled into packages and then linked together.
-- Identifiers are exported (or remain unexported) based on letter-case.
-- We import packages to access exported identifiers.
-- Any package can use a value of an unexported type, but this is annoying to use.
+- Le code Go est compilé en packages qui sont ensuite liés ensemble.
+- Les identifiants sont exportés (ou restent non exportés) en fonction de la casse de leurs premières lettres.
+- Nous importons des packages pour accéder aux identifiants exportés.
+- Tout package peut utiliser une valeur d'un type non exporté, mais cela est déconseillé et peu pratique.
 
-** Extra Reading
+** Lectures Supplémentaires
 
 [[https://www.ardanlabs.com/blog/2014/03/exportedunexported-identifiers-in-go.html][Exported/Unexported Identifiers In Go]] - William Kennedy    
 
 * Exercises
 
-Use the template as a starting point to complete the exercises. A possible solution is provided.
+Utilisez le modèle comme point de départ pour réaliser les exercices. Une solution possible est fournie.
 
 ** Exercise 1
 
-*Part* *A:* Create a package named toy with a single exported struct type named Toy.
-Add the exported fields Name and Weight. Then add two unexported fields named onHand
-and sold. Declare a factory function called New to create values of type toy and accept
-parameters for the exported fields. Then declare methods that return and update values
-for the unexported fields.
+*Partie* *A:* Créez un package nommé `toy` avec une seule struct exportée nommée `Toy`.
+Ajoutez les champs exportés `Name` et `Weight`. Ensuite, ajoutez deux champs non exportés nommés `onHand` et `sold`.
+Déclarez une fonction factory (usine) appelée `New` pour créer des valeurs de type `Toy` acceptant des paramètres pour 
+les champs exportés. Enfin, déclarez des méthodes qui retournent et mettent à jour les valeurs des champs non exportés.
 
-*Part* *B:* Create a program that imports the toy package. Use the New function to
-create a value of type toy. Then use the methods to set the counts and display the
-field values of that toy value.
+*Partie* *B:* Créez un programme qui importe le package `toy`. Utilisez la fonction `New` pour créer une valeur de type `toy`. Ensuite, utilisez les méthodes pour définir et afficher les valeurs de `toy` 
 
 .play exporting/exercise1.go
 .play exporting/answer1.go
