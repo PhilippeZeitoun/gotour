@@ -1,28 +1,27 @@
 Mocking
-Since the compiler can perform static code analysis to determine if a concrete value implements an interface, the developer declaring the concrete type doesn’t need to provide interfaces as well.
+Comme le compilateur peut effectuer une analyse statique du code pour déterminer si une valeur concrète implémente une interface, le développeur qui déclare le type concret n'a pas besoin de fournir également des interfaces.
 
 * Mocking
 
-- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Watch The Video]]
-- Need Financial Assistance, Use Our [[https://www.ardanlabs.com/scholarship/][Scholarship Form]]
+- [[https://www.ardanlabs.com/training/individual-on-demand/ultimate-go-bundle/][Regarder la Video]]
+- Besoin d'une aide financière, Utilisez notre [[https://www.ardanlabs.com/scholarship/][Formulaire de Bourse d'études]]
 
-The best way to take advantage of embedding is through the compositional design
-pattern. The idea is to compose larger types from smaller types and focus on the
-composition of behavior.
+Le meilleur moyen de tirer parti de l'imbrication se fait par le biais du modèle de conception compositionnel. 
+L'idée est de composer des types plus grands à partir de types plus petits et de se concentrer sur la composition 
+du comportement.
 
-** Code Review
+** Analyse de Code
 
-- *Example* *1:* Mocking
+- *Exemple* *1:* Mocking
 
 .play composition/mocking/example1.go
 
 ** Interface Ownership
 
-One thing that is different about Go from other languages is the idea of convention
-over configuration. This really shows itself with how Go handles interface compliance.
-Because the compiler can perform static code analysis to determine if a concrete value
-implements an interface, the developer declaring the concrete type doesn’t need to
-provide interfaces as well.
+En Go, contrairement à d'autres langages, on privilégie l'idée de convention plutôt que de configuration. Cela se 
+manifeste clairement dans la façon dont Go gère la conformité aux interfaces. Étant donné que le compilateur peut 
+effectuer une analyse statique du code pour déterminer si une valeur concrète implémente une interface, le développeur 
+qui déclare un type concret n'a pas besoin de spécifier les interfaces explicitement."
 
     package pubsub
 
@@ -46,13 +45,12 @@ provide interfaces as well.
         return nil
     }
 
-You've just implemented a new API that provides a concrete implementation for publish
-and subscribe. There are no interfaces being provided because this API does not
-need one. This is a single concrete implementation.
+Vous venez d'implémenter une nouvelle API qui fournit une implémentation concrète pour la publier et souscrire (`PubSub`).
+Aucune interface n'est fournie car cette API n'en a pas besoin. Il s'agit d'une implémentation concrète unique.
 
-What if the application developer wanting to use this new API needs an interface
-because they have the need to mock this implementation during tests? In Go, that
-developer can declare the interface and the compiler can identify the compliance.
+Et si les développeurs d'applications qui souhaite utiliser cette nouvelle API a besoin d'une interface car 
+ils ont besoin de simuler cette implémentation pendant les tests ? En Go, un développeur peut déclarer l'interface 
+et le compilateur peut identifier la conformité.
 
     package main
 
@@ -73,11 +71,10 @@ developer can declare the interface and the compiler can identify the compliance
         return nil
     }
 
-This code in the main package is declaring an interface. This interface represents
-the API that the application is using from the pubsub package. The developer has
-implemented their own pubsub implementation for testing. The key here is that this
-application developer doesn’t use any concrete implementation directly, but decouples
-themselves through their own interface.
+Ce code dans le `package main` déclare une interface. Cette interface représente l'API que l'application utilise 
+à partir du `package pubsub`. Le développeur a implémenté sa propre implémentation `pubsub` à des fins de test. 
+Le point clé ici est que ce développeur d'application n'utilise aucune implémentation concrète directement, mais 
+procède lui-même au découplage en utilisant sa propre interface.
 
     func main() {
         pubs := []publisher{
@@ -91,7 +88,6 @@ themselves through their own interface.
         }
     }
 
-To provide an example, the main function constructs a collection that is initialized
-with the pubsub implementation and the mock implementation. The publisher interface
-allows this. Then a for range loop is implemented to show how the application code
-is abstracted from any concrete implementation.
+Pour illustrer ce concept, la fonction `main` crée une collection initialisée avec l'implémentation `pubsub` et 
+l'implémentation simulée. L'interface `publisher` rend cela possible. Ensuite, une boucle for est implémentée 
+pour montrer comment le code de l'application est abstrait de toute implémentation concrète."
