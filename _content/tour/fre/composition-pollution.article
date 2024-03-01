@@ -28,14 +28,14 @@ Voici des choses que j'ai entendues d'autres développeurs.
 
 "J'utilise des interfaces parce que nous devons utiliser des interfaces."
 
-Non! Il n'est pas obligatoire d'utiliser des interfaces. On les utilise uniquement si cela pratique et raisonnable. 
+Non, il n'est pas obligatoire d'utiliser des interfaces. On les utilise uniquement si cela pratique et raisonnable. 
 L'utilisation d'interfaces a un coût : une couche d'abstraction et une allocation de mémoire supplémentaire lorsque 
 l'on y stocke des valeurs concrètes. À moins que le gain en découplage ne justifie le coût de l'allocation, 
 vous devriez éviter d'utiliser des interfaces.
 
 "J'ai besoin de pouvoir tester mon code, donc je dois utiliser des interfaces."
 
-Non! Vous devez en premier lieu concevoir votre API pour l'utilisateur, et pour vos tests. Si l'API n'est pas testable, 
+Non, vous devez en premier lieu concevoir votre API pour l'utilisateur, et pour vos tests. Si l'API n'est pas testable, 
 demandez-vous si elle est utilisable. Il existe également différents niveaux d'API. Les API non exportées de bas niveau 
 peuvent et doivent se concentrer sur la testabilité. Les API exportées de haut niveau doivent quant à elles se 
 concentrer sur leur utilisabilité.
