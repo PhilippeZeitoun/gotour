@@ -314,7 +314,7 @@ récupération, une décision est prise pour récupérer, poursuivre ou arrêter
 Le problème est que toutes les fonctions ne peuvent pas gérer une erreur. Une des raisons à cela pourrait être que 
 toutes les fonctions ne sont pas autorisées à journaliser (log). Que se passe-t-il lorsqu'une erreur est transmise 
 en remontant la pile d'appels et qu'elle ne peut pas être traitée par la fonction qui la reçoit ? Une erreur 
-doit être encapsulée dans un contexte afin que la fonction qui la gère finalement puisse le faire correctement.
+doit être encapsulée dans un contexte afin que la fonction finale en charge de la gérée, puisse le faire correctement.
 
     package main
 
