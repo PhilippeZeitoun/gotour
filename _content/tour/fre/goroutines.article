@@ -243,7 +243,7 @@ car le `WaitGroup` ne peut pas redescendre à 0. L'appel à `Wait` se bloquera i
     fatal error: all goroutines are asleep - deadlock!
 
     goroutine 1 [semacquire]:
-    sync.runtime_Semacquire(0xc00001a0a8)
+    sync.runtime_Semacquire(0xc00001a0a8)git
         /usr/local/go/src/runtime/sema.go:56 +0x45
     sync.(*WaitGroup).Wait(0xc00001a0a0)
         /usr/local/go/src/sync/waitgroup.go:130 +0x65
