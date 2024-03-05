@@ -239,8 +239,7 @@ Elles sont mises en place pour garantir le plus haut niveau d'intégrité dans v
 
 Voici les règles définies par les spécifications du langage Go.
 
-- Pour toute valeur d'un type T, seules les méthodes implémentées avec un receveur pour ce type appartiennent 
-à l'ensemble de méthodes de cette valeur.
+- Pour toute valeur d'un type T, seules les méthodes implémentées avec un receveur de valeur pour ce type appartiennent à l'ensemble de méthodes de cette valeur.
 - Pour toute adresse mémoire d'un type T, toutes les méthodes implémentées pour ce type appartiennent à 
 l'ensemble de méthodes de cette valeur.
 
