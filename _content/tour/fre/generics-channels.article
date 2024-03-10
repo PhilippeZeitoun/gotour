@@ -1,35 +1,35 @@
 Channels
-Explore how the Go team could add a package of concurrency patterns into the standard library thanks to generics.
+Explorer Comment l'équipe Go ajoute d'un paquet de modèles de concurrence à la bibliothèque standard Go grâce aux génériques.
+
 
 * Generics - Channels
 
-Explore how the Go team could add a package of concurrency patterns into the standard library thanks to generics.
+Explorer Comment l'équipe Go ajoute d'un paquet de modèles de concurrence à la bibliothèque standard Go grâce aux génériques.
 
 ** Video
 
-Watch the talk I gave about Generics which walks you through all the
-examples in this section of the Tour.
+Regardez la conférence que j'ai donnée sur les génériques, qui vous présente tous les exemples de cette section du Tour.
 
 .html generics-video.html
 
-** Code Review
+** Analyse de Code
 
-- *Example* *1*: Work Function
-- *Example* *2*: Pooling
+- *Exemple* *1*: Work Function
+- *Exemple* *2*: Pooling
 
 .play generics/channels/example1.go
 .play generics/channels/example2.go
 
-** Explained
+** Explications
 
-This would require declaring channels and functions using generic types.
+Cela demanderait de déclarer des channels et des fonctions en utilisant des types génériques.
+
 
     type workFn[Result any] func(context.Context) Result
 
-In this example, a type is declared that represents a function which accepts a context
-and returns a value of generic type Result. This function declaration describes a
-function that implements the concurrent work that will be performed and the result
-of that work.
+Dans cet exemple, on déclare un type qui représente une fonction acceptant un contexte et retournant une valeur 
+générique de type `Result`. Cette déclaration de fonction décrit une fonction qui implémente le travail concurrent 
+qui sera effectué et le résultat de ce travail.
 
     func doWork[Result any](ctx context.Context, work workFn[Result]) chan Result {
         ch := make(chan Result, 1)
@@ -42,18 +42,16 @@ of that work.
         return ch
     }
 
-Now write a function named doWork that executes the specified work function
-concurrently and returns a channel so the caller can receive the result of the work
-performed by the work function. A generic type named Result is declared to
-represent the return type for the work function and the type for the channel.
+Écrivez maintenant une fonction nommée `doWork` qui exécute la fonction de travail `work` spécifiée concurremment et 
+renvoie une channel afin que l'appelant puisse recevoir le résultat du travail effectué par la fonction work. Un type générique nommé `Result` est déclaré pour représenter le type de retour de la fonction de travail `work` et le type 
+de la channel.
 
-In the implementation of the doWork function, a buffered channel of one is
-constructed of generic type Result. That’s the channel returned to the caller to
-receive the result of the concurrent work. In the middle of the function, a goroutine
-is constructed to execute the work function concurrently. Once the work function
-returns, the return argument is sent back to the caller through the channel.
+Dans l'implémentation de la fonction `doWork`, une channel avec tampon de un type générique `Result` est construite. 
+Cette channel est renvoyée à l'appelant pour recevoir le résultat du travail concurrent. Au milieu de la fonction, 
+une goroutine est créée pour exécuter la fonction de travail `work` de manière concurrente. Une fois la fonction `work` 
+achevée, l'argument de retour est renvoyé à l'appelant via la channel.
 
-To test the use of the doWork function, build a small program.
+Pour tester l'utilisation de la fonction `doWork`, écrivons un petit programme.
 
     func main() {
         duration := 100 * time.Millisecond
@@ -76,34 +74,31 @@ To test the use of the doWork function, build a small program.
         }
     }
 
-Output:
+Sortie :
 
     doWork : work complete
     main: work complete
 
-The program starts by declaring a context that will timeout in 100 milliseconds.
-Then a work function is declared that waits for up to 200 milliseconds before
-returning the string, "work complete". With the context and the work function in
-place, a call to doWork is made and a channel of type string is returned and
-assigned to the variable result.
+Le programme commence par déclarer un contexte qui expirera dans 100 millisecondes. Ensuite, une fonction de travail 
+`dwf` est déclarée qui attend jusqu'à 200 millisecondes avant de renvoyer la chaîne "travail terminé". Une fois le 
+contexte et la fonction de travail définis, un appel à `doWork` est effectué et une channel de type `string` est 
+renvoyée et assignée à la variable `Result`.
 
-The compiler is able to determine the concrete type to use for the generic type
-Result by inspecting the return type of the literal work function that is passed into
-the doWork function. This is brilliant because it means you didn’t have to pass the type
-in on the call to doWork.
+Le compilateur peut déterminer le type concret à utiliser pour le type générique `Result` en inspectant le type de 
+retour de la fonction littérale de travail transmise à la fonction `doWork`. C'est brillant car cela signifie que 
+vous n'avez pas besoin de spécifier le type lors de l'appel à `doWork`.
 
-With the channel of type string assigned to the variable result, a select case is used
-to wait for the result to be returned on time, or for the timeout to occur. The
-doWork function can be used to perform this concurrent work for any concrete type
-required.
+Un canal de type `string` est associé à la variable `result`. On utilise un `select` pour attendre que `result` renvoie 
+une valeur à temps, ou pour gérer un délai d'attente. La fonction `doWork` permet d'effectuer ce travail concurrent 
+pour n'importe quel type concret requis.
 
-This same idea could be applied to a pool of goroutines that could execute work on
-a generic input and return a generic result.
+Nous pourrions appliquer la même idée à un pool de goroutines capable d'exécuter un travail sur une entrée générique 
+et de renvoyer un résultat générique."
 
-type workFn[Input any, Result any] func(input Input) Result
 
-In this example, change the function type to accept a generic input and return a
-generic result.
+    type workFn[Input any, Result any] func(input Input) Result
+
+Dans cet exemple, on modifie le type de la fonction pour accepter une entrée générique et renvoyer un résultat générique.
 
     func poolWork[Input any, Result any](size int, work workFn[Input, Result]) (chan Input, func()) {
         var wg sync.WaitGroup
@@ -129,18 +124,16 @@ generic result.
         return ch, cancel
     }
 
-In the poolWork function, the same two generic types are declared to represent the
-input and return type for the work function. A WaitGroup is constructed to manage
-the lifecycle of the Goroutines in the pool. Then a channel is constructed of the
-generic Input type. This channel is used by the Goroutines in the pool to receive the
-input data for the work function.
+Dans la fonction `poolWork`, les deux mêmes types génériques sont déclarés pour représenter le type d'entrée et 
+de retour de la fonction de travail `work`. Un WaitGroup `wg`est construit pour gérer le cycle de vie des goroutines 
+dans le pool. Ensuite, une channel est construite avec le type d'entrée générique. Cette channel est utilisée par les 
+goroutines dans le pool pour recevoir les données d'entrée de la fonction de travail.
 
-Then the pool of Goroutines are created with each Goroutine waiting in a receive
-operation using a for-range loop against the channel. Finally, a cancel function is
-constructed to allow the caller to shutdown the pool and wait for all the Goroutines
-to signal they have terminated.
+Ensuite, le pool de goroutines est créé. Chaque goroutine attend une opération de réception en utilisant une boucle 
+`for-range` sur la channel. Finalement, une fonction d'annulation `cancel` est construite pour permettre à l'appelant 
+d'arrêter le pool et d'attendre que toutes les goroutines signalent leur arrêt.
 
-To test the use of the poolWork function, built a second small program.
+Pour tester l'utilisation de la fonction `poolWork`, construit un second petit programme.
 
     func main() {
         size := runtime.GOMAXPROCS(0)
@@ -158,21 +151,19 @@ To test the use of the poolWork function, built a second small program.
         }
     }
 
-Output:
+Sortie :
 
     pollWork : 3 : received
     pollWork : 2 : received
     pollWork : 1 : received
     pollWork : 0 : received
 
-The size of the pool is calculated based on the number of Goroutines that can run in
-parallel. Then a work function is constructed to sleep for a random amount of time
-and then return a string that represents the input.
+La taille du pool est calculée en fonction du nombre de goroutines pouvant s'exécuter en parallèle. Ensuite, une 
+fonction de travail est créée pour dormir pendant un laps de temps aléatoire, puis renvoyer une chaîne de caractères 
+représentant l'entrée.
 
-With that in place, the poolWork function is executed and the channel and cancel
-function returned. The cancel function is deferred and a loop is constructed to send
-4 values into the pool. The output will be different each time you run the program
-since this work is happening concurrently.
+Une fois cela en place, la fonction `poolWork` est exécutée et la channel et la fonction `cancel` sont retournées. 
+La fonction `cancel` est différée et une boucle est construite pour envoyer 4 valeurs dans le pool. La sortie sera 
+différente à chaque exécution du programme car ce travail se déroule de manière concurrente.
 
-These little examples provide some insight into how a concurrent package could be
-implemented.
+Ces petits exemples donnent un aperçu de la façon dont un package concurrent pourrait être implémenté.
