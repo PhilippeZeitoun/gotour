@@ -1,24 +1,23 @@
-Multi-Type Parameters
-You're not restricted to using just one generic type at a time.
+Paramètres Multi-Types
+Vous n'êtes pas limité à l'utilisation d'un seul type générique à la fois.
 
-* Generics - Multi-Type Parameters
+* Generics - Paramètres Multi-Types
 
-You're not restricted to using just one generic type at a time.
+Vous n'êtes pas limité à l'utilisation d'un seul type générique à la fois.
 
 ** Video
 
-Watch the talk I gave about Generics which walks you through all the
-examples in this section of the Tour.
+Regardez la conférence que j'ai donnée sur les génériques, qui vous présente tous les exemples de cette section du Tour.
 
 .html generics-video.html
 
-** Code Review
+** Analyse de Code
 
-- *Example* *1*: Print function
+- *Exemple* *1*: Print function
 
 .play generics/multi-type-params/example1.go
 
-** Explained
+** Explications
 
     func Print[L any, V fmt.Stringer](labels []L, vals []V) {
         for i, v := range vals {
@@ -26,11 +25,11 @@ examples in this section of the Tour.
         }
     }
 
-The Print function accepts a collection of some type L and a collection of some type
-V. Type L can be anything, but type V is constrained to values that know how to
-String. The collection of some type V is iterated over and printed with the
-corresponding label from the collection of type L.
+La fonction Print accepte une collection de type L et une collection de type V. Le type L peut contenir des éléments 
+de n'importe quel type, mais V est limité aux valeurs ayant le comportement défini par l'interface `fmt.Stringer`.
+La collection d'éléments de type V est parcourue et on affiche chaque élément avec son étiquette correspondante 
+provenant de la collection de type L.
 
-The name of the generic type can be anything. The naming convention for generic
-types is something that needs to be better defined for best practices. For now, try
-to stick to single letter capital letters when it works for readability.
+Le nom du type générique peut être n'importe quel nom. Les conventions de nommage pour les types génériques nécessitent 
+une meilleure définition pour établir de bonnes pratiques. Pour l'instant, privilégiez l'utilisation de lettres 
+majuscules uniques lorsque cela améliore la lisibilité du code.
